@@ -1,0 +1,61 @@
+.marqueeWrap {
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, var(--card), rgba(108,99,255,0.08), var(--card));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0;
+  position: relative;
+}
+
+/* Fade edges */
+.marqueeWrap::before,
+.marqueeWrap::after {
+  content: '';
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 120px;
+  z-index: 2;
+  pointer-events: none;
+}
+.marqueeWrap::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg), transparent);
+}
+.marqueeWrap::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg), transparent);
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: scroll 35s linear infinite;
+}
+
+.track:hover { animation-play-state: paused; }
+
+@keyframes scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  white-space: nowrap;
+  color: var(--text2);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0 0.5rem;
+}
+
+.item:hover { color: var(--accent2); }
+
+.sep {
+  color: var(--accent);
+  opacity: 0.5;
+  font-size: 0.6rem;
+  margin-left: 0.6rem;
+}
