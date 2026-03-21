@@ -1,29 +1,19 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import api from '../api';
 import { FiSend, FiMail, FiLinkedin, FiGithub } from 'react-icons/fi';
 import styles from './Contact.module.css';
 
 export default function Contact() {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('');
-  const [loading, setLoading] = useState(false);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    setLoading(true);
-    setStatus('');
-    try {
-      await api.post('/api/contact', form);
-      setStatus('success');
-      setForm({ name: '', email: '', message: '' });
-    } catch {
-      setStatus('error');
-    } finally {
-      setLoading(false);
-    }
+    window.location.href = `mailto:abiniveshmayilsamy1@gmail.com?subject=Portfolio Contact from ${form.name}&body=${encodeURIComponent(form.message)}%0A%0AFrom: ${form.email}`;
+    setStatus('success');
+    setForm({ name: '', email: '', message: '' });
   };
 
   return (
@@ -108,8 +98,8 @@ export default function Contact() {
             {status === 'error' && (
               <p className={styles.error}>❌ Something went wrong. Please try again.</p>
             )}
-            <button type="submit" className="btn btn-primary" disabled={loading}>
-              <FiSend /> {loading ? 'Sending...' : 'Send Message'}
+            <button type="submit" className="btn btn-primary">
+              <FiSend /> Send Message
             </button>
           </form>
         </div>

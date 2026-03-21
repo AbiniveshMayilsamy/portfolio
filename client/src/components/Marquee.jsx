@@ -1,9 +1,6 @@
-import { useEffect, useState } from 'react';
-import api from '../api';
 import styles from './Marquee.module.css';
 
-// Static fallback achievements shown even before any uploads
-const STATIC = [
+const items = [
   '🏆 Competition Winner',
   '☁️ AWS Certified — Intellipaat',
   '🎓 IIT Madras — ML & Computer Vision',
@@ -15,20 +12,6 @@ const STATIC = [
 ];
 
 export default function Marquee() {
-  const [prizes, setPrizes] = useState([]);
-
-  useEffect(() => {
-    api.get('/api/gallery?category=prize')
-      .then(r => setPrizes(r.data))
-      .catch(() => {});
-  }, []);
-
-  const items = [
-    ...prizes.map(p => `🏆 ${p.title}`),
-    ...STATIC
-  ];
-
-  // Duplicate for seamless loop
   const doubled = [...items, ...items];
 
   return (
