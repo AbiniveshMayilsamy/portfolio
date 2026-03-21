@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
+import api from '../api';
 import { FiUpload, FiTrash2, FiLogOut, FiFile, FiMail, FiImage, FiPlus, FiX } from 'react-icons/fi';
 import styles from './Admin.module.css';
 
@@ -38,9 +38,9 @@ export default function AdminDashboard({ token, onLogout }) {
 
   const fetchAll = async () => {
     const [g, f, c] = await Promise.all([
-      axios.get('/api/admin/gallery', { headers }),
-      axios.get('/api/admin/uploads', { headers }),
-      axios.get('/api/admin/contacts', { headers }),
+      api.get('/api/admin/gallery', { headers }),
+      api.get('/api/admin/uploads', { headers }),
+      api.get('/api/admin/contacts', { headers }),
     ]);
     setGallery(g.data);
     setFiles(f.data);
@@ -72,7 +72,7 @@ export default function AdminDashboard({ token, onLogout }) {
     form.append('description', gDesc);
     form.append('category', gCat);
     try {
-      await axios.post('/api/admin/gallery', form, {
+      await api.post('/api/admin/gallery', form, {
         headers: { ...headers, 'Content-Type': 'multipart/form-data' }
       });
       setGMsg('✅ Uploaded!');
@@ -87,7 +87,7 @@ export default function AdminDashboard({ token, onLogout }) {
 
   const handleGDelete = async id => {
     if (!confirm('Delete this image?')) return;
-    await axios.delete(`/api/admin/gallery/${id}`, { headers });
+    await api.delete(`/api/admin/gallery/${id}`, { headers });
     fetchAll();
   };
 
@@ -99,7 +99,7 @@ export default function AdminDashboard({ token, onLogout }) {
     form.append('file', fFile);
     form.append('description', fDesc);
     try {
-      await axios.post('/api/admin/upload', form, {
+      await api.post('/api/admin/upload', form, {
         headers: { ...headers, 'Content-Type': 'multipart/form-data' }
       });
       setFMsg('✅ Uploaded!');
@@ -115,7 +115,7 @@ export default function AdminDashboard({ token, onLogout }) {
 
   const handleFDelete = async id => {
     if (!confirm('Delete this file?')) return;
-    await axios.delete(`/api/admin/uploads/${id}`, { headers });
+    await api.delete(`/api/admin/uploads/${id}`, { headers });
     fetchAll();
   };
 

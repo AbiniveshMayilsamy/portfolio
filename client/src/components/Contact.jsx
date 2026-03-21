@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../api';
 import { FiSend, FiMail, FiLinkedin, FiGithub } from 'react-icons/fi';
 import styles from './Contact.module.css';
 
@@ -16,7 +16,7 @@ export default function Contact() {
     setLoading(true);
     setStatus('');
     try {
-      await axios.post('http://localhost:5000/api/contact', form);
+      await api.post('/api/contact', form);
       setStatus('success');
       setForm({ name: '', email: '', message: '' });
     } catch {

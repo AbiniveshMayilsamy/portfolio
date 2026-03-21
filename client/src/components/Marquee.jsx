@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 import styles from './Marquee.module.css';
 
 // Static fallback achievements shown even before any uploads
@@ -18,7 +18,7 @@ export default function Marquee() {
   const [prizes, setPrizes] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/gallery?category=prize')
+    api.get('/api/gallery?category=prize')
       .then(r => setPrizes(r.data))
       .catch(() => {});
   }, []);

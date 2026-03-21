@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../api';
 import styles from './Gallery.module.css';
 
 const FILTERS = [
@@ -16,7 +16,7 @@ export default function Gallery() {
   const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
-    axios.get('/api/gallery').then(r => setItems(r.data)).catch(() => {});
+    api.get('/api/gallery').then(r => setItems(r.data)).catch(() => {});
   }, []);
 
   const filtered = filter === 'all' ? items : items.filter(i => i.category === filter);
