@@ -1,13 +1,6 @@
 [build]
-builder = "nixpacks"
-buildCommand = "npm install --prefix client && npm run build --prefix client"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "npm install --prefix server && node server/index.js"
 restartPolicyType = "on_failure"
-
-[nixpacks]
-aptPkgs = []
-
-[nixpacks.variables]
-NODE_VERSION = "20"
