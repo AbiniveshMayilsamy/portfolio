@@ -1,7 +1,7 @@
 [build]
 builder = "nixpacks"
-buildCommand = "cd client && npm install && npm run build"
+buildCommand = "npm install --prefix client && npm run build --prefix client"
 
 [deploy]
-startCommand = "cd server && npm install && node index.js"
+startCommand = "npm install --prefix server && node server/index.js"
 restartPolicyType = "on_failure"
