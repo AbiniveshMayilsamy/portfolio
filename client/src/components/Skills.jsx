@@ -37,8 +37,13 @@ export default function Skills() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="section-title">Skills</h2>
-        <div className="section-line" />
+        <div className="section-header">
+          <div className="section-header-inner">
+            <span className="section-header-line" />
+            <span className="section-header-text">The Tech Stack</span>
+            <span className="section-header-line right" />
+          </div>
+        </div>
 
         <div className={styles.grid}>
           {skillGroups.map((group, i) => (

@@ -1,55 +1,75 @@
 import { motion } from 'framer-motion';
-import { FiUser, FiMapPin, FiMail, FiPhone } from 'react-icons/fi';
 import styles from './About.module.css';
-
-const info = [
-  { icon: <FiUser />, label: 'Name', value: 'Abinivesh M' },
-  { icon: <FiMapPin />, label: 'Location', value: 'Tamil Nadu, India' },
-  { icon: <FiMail />, label: 'Email', value: 'abiniveshmayilsamy1@gmail.com' },
-  { icon: <FiPhone />, label: 'Phone', value: '+91 9361937819' },
-];
 
 export default function About() {
   return (
     <section className="section" id="about">
+      <div className="section-header">
+        <div className="section-header-inner">
+          <span className="section-header-line" />
+          <span className="section-header-text">About The Developer</span>
+          <span className="section-header-line right" />
+        </div>
+      </div>
+
       <motion.div
+        className={styles.grid}
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="section-title">About Me</h2>
-        <div className="section-line" />
+        {/* Photo */}
+        <div className={styles.photoCol}>
+          <div className={styles.photoWrap}>
+            <div className={styles.photoRings}>
+              <div className={styles.ring1} />
+              <div className={styles.ring2} />
+            </div>
+            <img src="/profile.jpg" alt="Abinivesh M" className={styles.photo}
+              onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+            <div className={styles.photoFallback}><span>AM</span></div>
+            <div className={styles.photoOverlay}>
+              <p>Built with Passion</p>
+            </div>
+          </div>
+        </div>
 
-        <div className={styles.grid}>
-          <div className={styles.text}>
-            <p>
+        {/* Text */}
+        <div className={styles.textCol}>
+          <div className={styles.card}>
+            <div className={styles.accentBar} />
+            <p className={styles.desc}>
               I'm a Cloud & DevOps enthusiast and Computer Science student at Sri Eshwar College of
               Engineering (SECE), admitted via lateral entry after completing my Diploma in Computer
-              Engineering with 92.5% at Nachimutha Polytechnic College.
+              Engineering with 92.5% at Nachimuthu Polytechnic College.
             </p>
-            <p>
+            <p className={styles.desc}>
               With hands-on internship experience at CODEHUB NEXUS and VENKTERTECH, I've built
               scalable MERN stack applications, CMS platforms, and ML-powered systems like a
               computer vision tailoring app and a real-time voice emotion detector.
             </p>
-            <p>
+            <p className={styles.desc}>
               I'm passionate about Cloud (AWS, Azure), DevOps practices, and building intelligent
-              applications. I hold certifications in AWS, SQL, Java, and ML from platforms like
-              HackerRank, Oracle, IIT Madras, and Intellipaat.
+              applications. I hold certifications from HackerRank, Oracle, IIT Madras, and Intellipaat.
             </p>
           </div>
 
-          <div className={styles.infoGrid}>
-            {info.map(({ icon, label, value }) => (
-              <div key={label} className={styles.infoItem}>
-                <span className={styles.infoIcon}>{icon}</span>
-                <div>
-                  <p className={styles.infoLabel}>{label}</p>
-                  <p className={styles.infoValue}>{value}</p>
-                </div>
-              </div>
-            ))}
+          <div className={styles.stats}>
+            <div className={styles.stat}>
+              <span className={styles.statNum}>5+</span>
+              <span className={styles.statLabel}>Projects Built</span>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.stat}>
+              <span className={styles.statNum}>3</span>
+              <span className={styles.statLabel}>Internships</span>
+            </div>
+            <div className={styles.divider} />
+            <div className={styles.stat}>
+              <span className={styles.statNum}>10+</span>
+              <span className={styles.statLabel}>Tech Mastered</span>
+            </div>
           </div>
         </div>
       </motion.div>

@@ -14,24 +14,34 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const scrollTo = (id) => {
+  const scrollTo = id => {
     document.getElementById(id.toLowerCase())?.scrollIntoView({ behavior: 'smooth' });
     setOpen(false);
   };
 
   return (
     <nav className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={styles.logo} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-        AM<span>.</span>
+      <div className={styles.inner}>
+        <div className={styles.logo} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+          AM<span>.</span>
+        </div>
+
+        <ul className={`${styles.links} ${open ? styles.open : ''}`}>
+          {links.map(l => (
+            <li key={l} className={styles.linkItem} onClick={() => scrollTo(l)}>
+              {l}
+              <span className={styles.underline} />
+            </li>
+          ))}
+          <li>
+            <a href="/resume.pdf" download className={styles.resumeBtn}>Resume</a>
+          </li>
+        </ul>
+
+        <button className={styles.hamburger} onClick={() => setOpen(!open)}>
+          {open ? <FiX size={22} /> : <FiMenu size={22} />}
+        </button>
       </div>
-      <ul className={`${styles.links} ${open ? styles.open : ''}`}>
-        {links.map(l => (
-          <li key={l} onClick={() => scrollTo(l)}>{l}</li>
-        ))}
-      </ul>
-      <button className={styles.hamburger} onClick={() => setOpen(!open)}>
-        {open ? <FiX size={22} /> : <FiMenu size={22} />}
-      </button>
     </nav>
   );
 }

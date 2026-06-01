@@ -1,59 +1,168 @@
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
-  align-items: start;
+  grid-template-columns: 5fr 7fr;
+  gap: 4rem;
+  align-items: center;
 }
 
-.text p {
-  color: var(--text2);
-  margin-bottom: 16px;
-  line-height: 1.9;
-  font-size: 0.97rem;
+/* Photo */
+.photoCol { display: flex; justify-content: center; }
+
+.photoWrap {
+  position: relative;
+  width: 320px;
+  height: 400px;
 }
 
-.infoGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+.photoRings {
+  position: absolute;
+  inset: 0;
 }
 
-.infoItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 16px;
-  transition: border-color 0.3s;
+.ring1 {
+  position: absolute;
+  inset: -12px;
+  border: 1px solid rgba(0,255,136,0.15);
+  border-radius: 20px;
+  transition: all 0.5s;
 }
 
-.infoItem:hover { border-color: var(--accent); }
+.ring2 {
+  position: absolute;
+  inset: -24px;
+  border: 1px solid rgba(0,255,136,0.06);
+  border-radius: 28px;
+  transition: all 0.7s;
+}
 
-.infoIcon {
+.photoWrap:hover .ring1 { inset: -18px; }
+.photoWrap:hover .ring2 { inset: -32px; }
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 16px;
+  border: 2px solid rgba(255,255,255,0.08);
+  display: block;
+  filter: grayscale(20%);
+  transition: filter 0.5s, transform 0.5s;
+  box-shadow: 0 0 40px rgba(0,255,136,0.1);
+}
+
+.photoWrap:hover .photo {
+  filter: grayscale(0%);
+  transform: scale(1.02);
+}
+
+.photoFallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  background: var(--bg3);
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: 900;
   color: var(--accent);
-  font-size: 1.1rem;
-  margin-top: 2px;
-  flex-shrink: 0;
+  border: 2px solid rgba(0,255,136,0.2);
 }
 
-.infoLabel {
+.photoOverlay {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.04);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.08);
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.4s;
+  text-align: center;
+}
+
+.photoWrap:hover .photoOverlay {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.photoOverlay p {
   font-size: 0.75rem;
-  color: var(--text2);
+  font-weight: 700;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 4px;
+  color: #fff;
 }
 
-.infoValue {
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: var(--text);
-  word-break: break-all;
+/* Text */
+.textCol { display: flex; flex-direction: column; gap: 2rem; }
+
+.card {
+  position: relative;
+  padding: 2rem 2.5rem;
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.02);
+  backdrop-filter: blur(20px);
+  overflow: hidden;
 }
 
-@media (max-width: 768px) {
-  .grid { grid-template-columns: 1fr; gap: 32px; }
-  .infoGrid { grid-template-columns: 1fr; }
+.accentBar {
+  position: absolute;
+  left: 0;
+  top: 2rem;
+  width: 3px;
+  height: 5rem;
+  background: linear-gradient(to bottom, var(--accent), transparent);
+  border-radius: 2px;
+}
+
+.desc {
+  color: #94a3b8;
+  font-size: 1rem;
+  line-height: 1.9;
+  margin-bottom: 1rem;
+  font-style: italic;
+}
+
+.desc:last-child { margin-bottom: 0; }
+
+/* Stats */
+.stats {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.stat { display: flex; flex-direction: column; gap: 4px; }
+
+.statNum {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #fff;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-weight: 700;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background: rgba(255,255,255,0.08);
+}
+
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .photoWrap { width: 260px; height: 320px; }
+  .photoCol { order: -1; }
 }

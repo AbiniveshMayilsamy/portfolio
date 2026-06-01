@@ -24,8 +24,13 @@ export default function Contact() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="section-title">Get In Touch</h2>
-        <div className="section-line" />
+        <div className="section-header">
+          <div className="section-header-inner">
+            <span className="section-header-line" />
+            <span className="section-header-text">Let's Connect</span>
+            <span className="section-header-line right" />
+          </div>
+        </div>
 
         <div className={styles.grid}>
           <div className={styles.info}>

@@ -44,8 +44,13 @@ export default function Education() {
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
       >
-        <h2 className="section-title">Education</h2>
-        <div className="section-line" />
+        <div className="section-header">
+          <div className="section-header-inner">
+            <span className="section-header-line" />
+            <span className="section-header-text">Education & Certifications</span>
+            <span className="section-header-line right" />
+          </div>
+        </div>
 
         <div className={styles.grid}>
           <div className={styles.eduList}>
