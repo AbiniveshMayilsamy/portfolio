@@ -1,7 +1,7 @@
 .marqueeWrap {
   width: 100%;
   overflow: hidden;
-  background: linear-gradient(90deg, var(--card), rgba(108,99,255,0.08), var(--card));
+  background: linear-gradient(90deg, var(--card), rgba(0,255,136,0.06), var(--card));
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 14px 0;

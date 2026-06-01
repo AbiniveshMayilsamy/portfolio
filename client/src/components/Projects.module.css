@@ -12,8 +12,8 @@
 }
 
 .featured {
-  border-color: rgba(108, 99, 255, 0.4);
-  background: linear-gradient(135deg, var(--card), rgba(108,99,255,0.05));
+  border-color: rgba(0, 255, 136, 0.3);
+  background: linear-gradient(135deg, var(--card), rgba(0,255,136,0.04));
 }
 
 .featuredBadge {

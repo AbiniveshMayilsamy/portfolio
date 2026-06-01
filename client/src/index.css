@@ -5,16 +5,16 @@
 }
 
 :root {
-  --bg: #0a0a0f;
-  --bg2: #111118;
-  --bg3: #1a1a24;
-  --accent: #6c63ff;
-  --accent2: #a78bfa;
-  --text: #e2e8f0;
-  --text2: #94a3b8;
-  --border: #2d2d3d;
-  --card: #13131e;
-  --glow: rgba(108, 99, 255, 0.15);
+  --bg: #000000;
+  --bg2: #0a0a0a;
+  --bg3: #111111;
+  --accent: #00ff88;
+  --accent2: #00cc6a;
+  --text: #e8ffe8;
+  --text2: #7aab7a;
+  --border: #1a3a1a;
+  --card: #080808;
+  --glow: rgba(0, 255, 136, 0.12);
 }
 
 html { scroll-behavior: smooth; }
@@ -91,7 +91,7 @@ a { color: inherit; text-decoration: none; }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(108, 99, 255, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 255, 136, 0.35);
 }
 
 .btn-outline {
@@ -109,10 +109,10 @@ a { color: inherit; text-decoration: none; }
 .tag {
   display: inline-block;
   padding: 4px 12px;
-  background: rgba(108, 99, 255, 0.15);
-  color: var(--accent2);
+  background: rgba(0, 255, 136, 0.08);
+  color: var(--accent);
   border-radius: 20px;
   font-size: 0.8rem;
   font-weight: 500;
-  border: 1px solid rgba(108, 99, 255, 0.3);
+  border: 1px solid rgba(0, 255, 136, 0.25);
 }

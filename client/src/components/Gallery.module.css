@@ -16,7 +16,7 @@
   transition: all 0.2s;
 }
 .filterBtn:hover { border-color: var(--accent); color: var(--text); }
-.active { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(108,99,255,0.1) !important; font-weight: 600; }
+.active { border-color: var(--accent) !important; color: var(--accent) !important; background: rgba(0,255,136,0.08) !important; font-weight: 600; }
 
 .grid {
   display: grid;
@@ -35,7 +35,7 @@
 .card:hover {
   transform: translateY(-5px);
   border-color: var(--accent);
-  box-shadow: 0 8px 30px rgba(108,99,255,0.15);
+  box-shadow: 0 8px 30px rgba(0,255,136,0.12);
 }
 
 .imgWrap { position: relative; aspect-ratio: 4/3; overflow: hidden; }
@@ -49,8 +49,8 @@
   background: linear-gradient(transparent, rgba(0,0,0,0.5));
 }
 .catBadge {
-  background: rgba(108,99,255,0.85);
-  color: #fff;
+  background: rgba(0,255,136,0.85);
+  color: #000;
   border-radius: 6px;
   padding: 0.2rem 0.5rem;
   font-size: 0.75rem;
