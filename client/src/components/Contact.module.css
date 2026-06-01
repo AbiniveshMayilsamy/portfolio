@@ -1,5 +1,5 @@
 .contactSection {
-  background: linear-gradient(180deg, transparent, rgba(0,255,136,0.03), transparent);
+  background: linear-gradient(180deg, transparent, rgba(181,242,61,0.03), transparent);
 }
 
 .grid {
@@ -93,7 +93,7 @@
 .field textarea:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.08);
+  box-shadow: 0 0 0 3px rgba(181,242,61, 0.08);
 }
 
 .field input::placeholder,

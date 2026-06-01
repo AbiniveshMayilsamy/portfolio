@@ -12,7 +12,7 @@
   position: absolute;
   top: 5rem; left: 2rem;
   width: 18rem; height: 18rem;
-  background: rgba(0, 255, 136, 0.07);
+  background: rgba(181,242,61, 0.07);
   border-radius: 50%;
   filter: blur(80px);
   animation: pulse 4s ease-in-out infinite;
@@ -53,8 +53,8 @@
   display: inline-block;
   padding: 6px 16px;
   border-radius: 999px;
-  background: rgba(0, 255, 136, 0.08);
-  border: 1px solid rgba(0, 255, 136, 0.2);
+  background: rgba(181,242,61, 0.08);
+  border: 1px solid rgba(181,242,61, 0.2);
   color: var(--accent);
   font-size: 0.7rem;
   font-weight: 700;
@@ -115,8 +115,8 @@
 
 .social:hover {
   color: var(--accent);
-  border-color: rgba(0,255,136,0.4);
-  background: rgba(0,255,136,0.08);
+  border-color: rgba(181,242,61,0.4);
+  background: rgba(181,242,61,0.08);
   transform: translateY(-2px);
 }
 
@@ -139,12 +139,12 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   transition: all 0.3s;
-  box-shadow: 0 0 20px rgba(0,255,136,0.25);
+  box-shadow: 0 0 20px rgba(181,242,61,0.25);
 }
 
 .btnPrimary:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 30px rgba(0,255,136,0.4);
+  box-shadow: 0 0 30px rgba(181,242,61,0.4);
 }
 
 .btnOutline {
@@ -165,7 +165,7 @@
 
 .btnOutline:hover {
   background: rgba(255,255,255,0.08);
-  border-color: rgba(0,255,136,0.4);
+  border-color: rgba(181,242,61,0.4);
 }
 
 /* Code Card */
@@ -193,8 +193,8 @@
 
 .dots { display: flex; gap: 8px; }
 .dot1 { width: 12px; height: 12px; border-radius: 50%; background: var(--accent); }
-.dot2 { width: 12px; height: 12px; border-radius: 50%; background: rgba(0,255,136,0.4); }
-.dot3 { width: 12px; height: 12px; border-radius: 50%; background: rgba(0,255,136,0.15); }
+.dot2 { width: 12px; height: 12px; border-radius: 50%; background: rgba(181,242,61,0.4); }
+.dot3 { width: 12px; height: 12px; border-radius: 50%; background: rgba(181,242,61,0.15); }
 
 .fileName {
   font-family: monospace;
@@ -229,7 +229,7 @@
 .kw { color: var(--accent); }
 .var { color: #fff; }
 .prop { color: #cbd5e1; }
-.str { color: rgba(0,255,136,0.7); }
+.str { color: rgba(181,242,61,0.7); }
 .str2 { color: rgba(0,204,106,0.8); }
 .bool { color: var(--accent); }
 

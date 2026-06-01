@@ -22,7 +22,7 @@
 .ring1 {
   position: absolute;
   inset: -12px;
-  border: 1px solid rgba(0,255,136,0.15);
+  border: 1px solid rgba(181,242,61,0.15);
   border-radius: 20px;
   transition: all 0.5s;
 }
@@ -30,7 +30,7 @@
 .ring2 {
   position: absolute;
   inset: -24px;
-  border: 1px solid rgba(0,255,136,0.06);
+  border: 1px solid rgba(181,242,61,0.06);
   border-radius: 28px;
   transition: all 0.7s;
 }
@@ -48,7 +48,7 @@
   display: block;
   filter: grayscale(20%);
   transition: filter 0.5s, transform 0.5s;
-  box-shadow: 0 0 40px rgba(0,255,136,0.1);
+  box-shadow: 0 0 40px rgba(181,242,61,0.1);
 }
 
 .photoWrap:hover .photo {
@@ -67,7 +67,7 @@
   font-size: 4rem;
   font-weight: 900;
   color: var(--accent);
-  border: 2px solid rgba(0,255,136,0.2);
+  border: 2px solid rgba(181,242,61,0.2);
 }
 
 .photoOverlay {

@@ -35,26 +35,26 @@ function MovingCube() {
     <group>
       <mesh ref={glow} scale={2.2}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshBasicMaterial color="#00ff88" transparent opacity={0.04} side={THREE.BackSide} />
+        <meshBasicMaterial color="#b5f23d" transparent opacity={0.04} side={THREE.BackSide} />
       </mesh>
       <mesh ref={outer} scale={1.6}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshPhysicalMaterial color="#001a0d" emissive="#00ff88" emissiveIntensity={0.08} roughness={0.05} metalness={0.1} transmission={0.85} thickness={0.5} transparent opacity={0.35} side={THREE.DoubleSide} />
+        <meshPhysicalMaterial color="#001a0d" emissive="#b5f23d" emissiveIntensity={0.08} roughness={0.05} metalness={0.1} transmission={0.85} thickness={0.5} transparent opacity={0.35} side={THREE.DoubleSide} />
       </mesh>
       <mesh ref={wire1} scale={1.62}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshBasicMaterial color="#00ff88" wireframe transparent opacity={0.55} />
+        <meshBasicMaterial color="#b5f23d" wireframe transparent opacity={0.55} />
       </mesh>
       <mesh ref={inner} scale={0.9}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshPhysicalMaterial color="#001a0d" emissive="#00cc6a" emissiveIntensity={0.1} roughness={0.05} metalness={0.1} transmission={0.9} thickness={0.3} transparent opacity={0.25} side={THREE.DoubleSide} />
+        <meshPhysicalMaterial color="#001a0d" emissive="#8bc820" emissiveIntensity={0.1} roughness={0.05} metalness={0.1} transmission={0.9} thickness={0.3} transparent opacity={0.25} side={THREE.DoubleSide} />
       </mesh>
       <mesh ref={wire2} scale={0.92}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshBasicMaterial color="#00cc6a" wireframe transparent opacity={0.4} />
+        <meshBasicMaterial color="#8bc820" wireframe transparent opacity={0.4} />
       </mesh>
       {[[1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]].map((p, i) => (
-        <CornerDot key={i} position={p.map(v => v * 0.82)} color={i % 2 === 0 ? '#00ff88' : '#00cc6a'} index={i} />
+        <CornerDot key={i} position={p.map(v => v * 0.82)} color={i % 2 === 0 ? '#b5f23d' : '#8bc820'} index={i} />
       ))}
     </group>
   )
@@ -73,13 +73,13 @@ function CornerDot({ position, color, index }) {
 
 function FloatingCubes() {
   const cubes = useMemo(() => [
-    { pos: [-4.5, 2, -6],  scale: 0.35, speed: 0.5,  color: '#00ff88' },
-    { pos: [4.5, -2, -7],  scale: 0.28, speed: 0.7,  color: '#00cc6a' },
-    { pos: [-3, -3.5, -5], scale: 0.22, speed: 0.9,  color: '#00ff88' },
-    { pos: [3.5, 3, -8],   scale: 0.4,  speed: 0.4,  color: '#00cc6a' },
-    { pos: [0, -4, -6],    scale: 0.18, speed: 1.1,  color: '#00ff88' },
-    { pos: [-5, -1, -8],   scale: 0.3,  speed: 0.6,  color: '#00cc6a' },
-    { pos: [5, 1.5, -9],   scale: 0.25, speed: 0.8,  color: '#00ff88' },
+    { pos: [-4.5, 2, -6],  scale: 0.35, speed: 0.5,  color: '#b5f23d' },
+    { pos: [4.5, -2, -7],  scale: 0.28, speed: 0.7,  color: '#8bc820' },
+    { pos: [-3, -3.5, -5], scale: 0.22, speed: 0.9,  color: '#b5f23d' },
+    { pos: [3.5, 3, -8],   scale: 0.4,  speed: 0.4,  color: '#8bc820' },
+    { pos: [0, -4, -6],    scale: 0.18, speed: 1.1,  color: '#b5f23d' },
+    { pos: [-5, -1, -8],   scale: 0.3,  speed: 0.6,  color: '#8bc820' },
+    { pos: [5, 1.5, -9],   scale: 0.25, speed: 0.8,  color: '#b5f23d' },
   ], [])
   const refs = useRef([])
   useFrame((s) => {
@@ -104,9 +104,9 @@ function FloatingCubes() {
 
 function GradientBlobs() {
   const blobs = [
-    { pos: [-2, 1, -5],  color: '#00ff88', scale: [5, 4, 1] },
-    { pos: [2, -1, -6],  color: '#00cc6a', scale: [6, 4, 1] },
-    { pos: [0, 2, -7],   color: '#00ff88', scale: [4, 3, 1] },
+    { pos: [-2, 1, -5],  color: '#b5f23d', scale: [5, 4, 1] },
+    { pos: [2, -1, -6],  color: '#8bc820', scale: [6, 4, 1] },
+    { pos: [0, 2, -7],   color: '#b5f23d', scale: [4, 3, 1] },
   ]
   const refs = useRef([])
   useFrame((s) => {
@@ -148,9 +148,9 @@ export default function StarfieldBackground() {
       <Canvas camera={{ position: [0, 0, 5.5], fov: 55 }} dpr={[1, 1.5]}>
         <color attach="background" args={['#000000']} />
         <ambientLight intensity={0.15} />
-        <pointLight position={[4, 4, 3]} intensity={1.5} color="#00ff88" />
-        <pointLight position={[-4, -3, 2]} intensity={0.9} color="#00cc6a" />
-        <pointLight position={[0, 4, -2]} intensity={0.7} color="#00ff88" />
+        <pointLight position={[4, 4, 3]} intensity={1.5} color="#b5f23d" />
+        <pointLight position={[-4, -3, 2]} intensity={0.9} color="#8bc820" />
+        <pointLight position={[0, 4, -2]} intensity={0.7} color="#b5f23d" />
         <Scene />
         <EffectComposer disableNormalPass>
           <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.85} height={400} opacity={1.6} />

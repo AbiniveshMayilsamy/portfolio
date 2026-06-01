@@ -8,13 +8,14 @@
   --bg: #000000;
   --bg2: #050505;
   --bg3: #0a0a0a;
-  --accent: #00ff88;
-  --accent2: #00cc6a;
-  --text: #e2e8f0;
-  --text2: #94a3b8;
+  --accent: #b5f23d;
+  --accent2: #d4ff6a;
+  --accent3: #8bc820;
+  --text: #f5f5f5;
+  --text2: #888888;
   --border: rgba(255,255,255,0.08);
   --card: rgba(255,255,255,0.02);
-  --glow: rgba(0, 255, 136, 0.12);
+  --glow: rgba(181, 242, 61, 0.12);
 }
 
 html { scroll-behavior: smooth; }
@@ -65,13 +66,13 @@ a { color: inherit; text-decoration: none; }
 
 .section-header-text {
   background: var(--bg2);
-  border: 1px solid rgba(0,255,136,0.2);
+  border: 1px solid rgba(181,242,61,0.2);
   color: #fff;
   padding: 10px 28px;
   font-size: 1.3rem;
   font-weight: 800;
   border-radius: 999px;
-  box-shadow: 0 0 20px rgba(0,255,136,0.1);
+  box-shadow: 0 0 20px rgba(181,242,61,0.1);
   white-space: nowrap;
 }
 
@@ -104,8 +105,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .card:hover {
-  border-color: rgba(0,255,136,0.3);
-  box-shadow: 0 0 30px rgba(0,255,136,0.08);
+  border-color: rgba(181,242,61,0.3);
+  box-shadow: 0 0 30px rgba(181,242,61,0.08);
 }
 
 .btn {
@@ -126,12 +127,12 @@ a { color: inherit; text-decoration: none; }
 .btn-primary {
   background: linear-gradient(135deg, var(--accent), var(--accent2));
   color: #000;
-  box-shadow: 0 0 20px rgba(0,255,136,0.25);
+  box-shadow: 0 0 20px rgba(181,242,61,0.25);
 }
 
 .btn-primary:hover {
   transform: scale(1.04);
-  box-shadow: 0 0 30px rgba(0,255,136,0.4);
+  box-shadow: 0 0 30px rgba(181,242,61,0.4);
 }
 
 .btn-outline {
@@ -141,8 +142,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .btn-outline:hover {
-  background: rgba(0,255,136,0.08);
-  border-color: rgba(0,255,136,0.4);
+  background: rgba(181,242,61,0.08);
+  border-color: rgba(181,242,61,0.4);
 }
 
 .tag {
@@ -158,7 +159,7 @@ a { color: inherit; text-decoration: none; }
 }
 
 .tag:hover {
-  background: rgba(0,255,136,0.08);
-  border-color: rgba(0,255,136,0.3);
+  background: rgba(181,242,61,0.08);
+  border-color: rgba(181,242,61,0.3);
   color: var(--accent);
 }
