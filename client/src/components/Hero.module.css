@@ -102,6 +102,95 @@
   50%       { box-shadow: 0 0 16px var(--accent), 0 0 30px rgba(153,255,0,0.3); }
 }
 
+/* Waving Photo */
+.photoCol {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.photoGlow {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(153, 255, 0, 0.18) 0%, transparent 65%);
+  filter: blur(30px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.photoFrame {
+  width: clamp(160px, 16vw, 220px);
+  height: clamp(160px, 16vw, 220px);
+  border-radius: 50%;
+  padding: 3px;
+  background: conic-gradient(from 0deg, var(--accent), transparent 40%, var(--accent) 70%, transparent 100%);
+  animation: spinBorder 6s linear infinite;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+
+@keyframes spinBorder {
+  to { transform: rotate(360deg); }
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  background: #131315;
+}
+
+.photoFallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #131315;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.photoBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
+  background: rgba(153, 255, 0, 0.06);
+  border: 1px solid rgba(153, 255, 0, 0.2);
+  border-radius: 99px;
+  padding: 0.35rem 0.9rem;
+  white-space: nowrap;
+  position: relative;
+  z-index: 1;
+}
+
+.badgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 2s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
 /* Big Name */
 .nameRow {
   display: flex;
@@ -267,6 +356,7 @@
   .hero { padding-top: 7rem; }
   .nameFirst, .nameLast { font-size: clamp(2.2rem, 11vw, 4rem); }
   .verticalTicker { display: none; }
+  .photoCol { display: none; }
   .sub { font-size: 1rem; }
   .actions { flex-direction: column; align-items: stretch; gap: 0.75rem; }
   .stats { gap: 1.5rem; }

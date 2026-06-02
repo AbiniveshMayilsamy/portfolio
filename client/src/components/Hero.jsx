@@ -120,6 +120,38 @@ export default function Hero() {
               ))}
             </div>
           </div>
+
+          {/* Waving profile photo */}
+          <motion.div
+            className={styles.photoCol}
+            initial={{ opacity: 0, x: 40 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className={styles.photoGlow} />
+            <motion.div
+              className={styles.photoFrame}
+              animate={{ y: [0, -18, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              <img
+                src="/profile.jpeg"
+                alt="Abinivesh M"
+                className={styles.photo}
+                onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
+              />
+              <div className={styles.photoFallback}><span>AM</span></div>
+            </motion.div>
+            {/* Floating badge */}
+            <motion.div
+              className={styles.photoBadge}
+              animate={{ y: [0, -8, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+            >
+              <span className={styles.badgeDot} />
+              Available for work
+            </motion.div>
+          </motion.div>
         </div>
 
         {/* Cycling role */}
