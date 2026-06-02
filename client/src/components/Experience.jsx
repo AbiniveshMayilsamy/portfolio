@@ -4,6 +4,17 @@ import styles from './Experience.module.css';
 
 const experiences = [
   {
+    role: 'Boys Class Representative',
+    company: 'Sri Eshwar College of Engineering',
+    period: '2025 – Present',
+    type: 'Leadership',
+    points: [
+      'Elected Class Representative for Section II CSE A.',
+      'Coordinate between students and faculty for academic and administrative matters.',
+      'Organize events and represent the class in institutional activities.'
+    ]
+  },
+  {
     role: 'Full Stack Developer Intern',
     company: 'CODEHUB NEXUS',
     period: '2025',
@@ -15,35 +26,24 @@ const experiences = [
     ]
   },
   {
-    role: 'CMS Intern',
+    role: 'CMS & Web Development Intern',
     company: 'VENKTERTECH',
-    period: '2024',
+    period: '2023 – 2024',
     type: 'Internship',
     points: [
-      'Developed custom solutions via WordPress/Strapi including theme development and plugin integration.',
-      'Designed content architecture for CMS platforms.',
+      'Developed custom CMS solutions via WordPress/Strapi including theme development and plugin integration.',
+      'Designed and deployed responsive full stack web applications using HTML/CSS, JS, and Node.js.',
       'Streamlined content workflows using PHP and headless CMS API integrations.'
     ]
   },
   {
-    role: 'Web Content Creation Intern',
-    company: 'VENKTERTECH',
-    period: '2023',
-    type: 'Internship',
-    points: [
-      'Designed and deployed responsive full stack web applications using HTML/CSS, JS, and Node.js/Python.',
-      'Managed RESTful API integration and database operations.',
-      'Built functional e-commerce and blog platforms from scratch.'
-    ]
-  },
-  {
     role: 'Student Corporate Ambassador',
-    company: 'TN Skills — Naan Mudhalvan',
+    company: 'Nachimuthu Polytechnic College — TN Skills',
     period: '2023 – 2025',
     type: 'Leadership',
     points: [
       'Served as Student Corporate Ambassador at Nachimuthu Polytechnic College.',
-      'Promoted skill development programs under the Tamil Nadu government initiative.',
+      'Promoted skill development programs under the Tamil Nadu Naan Mudhalvan initiative.',
       'Coordinated student participation in upskilling and certification programs.'
     ]
   }

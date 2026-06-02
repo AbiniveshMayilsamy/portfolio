@@ -6,53 +6,53 @@ import styles from './Projects.module.css';
 const projects = [
   {
     num: '01',
-    title: 'Virtual Tailor',
-    sub: 'Custom Cloth Measurement Using Computer Vision',
-    year: '2025',
-    tags: ['Python', 'OpenCV', 'TensorFlow', 'Twilio'],
+    title: 'Neuro-Nav',
+    sub: 'Vision-Based Automated Guided Vehicle (AGV) with ROS 2',
+    year: '2026',
+    tags: ['ROS 2', 'NVIDIA Jetson', 'Python', 'OpenCV'],
     github: 'https://github.com/AbiniveshMayilsamy',
     live: '#',
     previewType: 'tailor'
   },
   {
     num: '02',
-    title: 'Vocal Mood',
-    sub: 'Real-Time Voice Emotion Detection Using ML',
-    year: '2025',
-    tags: ['Python', 'TensorFlow', 'RNN Models', 'MySQL'],
-    github: 'https://github.com/AbiniveshMayilsamy',
-    live: '#',
-    previewType: 'voice'
-  },
-  {
-    num: '03',
-    title: 'MERN Stack Applications',
-    sub: 'Scalable Full Stack Solutions & MVC Architecture',
-    year: '2025',
-    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
+    title: 'Agentic AI Loan System',
+    sub: 'AI-Driven Architecture for Autonomous Loan Approval — 2nd Prize Fiestaa\'26',
+    year: '2026',
+    tags: ['Python', 'Agentic AI', 'ML', 'Automation'],
     github: 'https://github.com/AbiniveshMayilsamy',
     live: '#',
     previewType: 'mern'
   },
   {
-    num: '04',
-    title: 'Strapi CMS Integrations',
-    sub: 'Custom Headless Solutions & PHP Workflows',
-    year: '2024',
-    tags: ['Strapi', 'WordPress', 'PHP', 'REST APIs'],
+    num: '03',
+    title: 'VocalMood',
+    sub: 'Real-Time Psychiatric Voice Emotion Detection Using RNN',
+    year: '2025',
+    tags: ['Python', 'TensorFlow', 'RNN', 'MySQL'],
     github: 'https://github.com/AbiniveshMayilsamy',
     live: '#',
-    previewType: 'cms'
+    previewType: 'voice'
+  },
+  {
+    num: '04',
+    title: 'Virtual Tailor',
+    sub: 'Custom Cloth Measurement Using Computer Vision',
+    year: '2025',
+    tags: ['Python', 'OpenCV', 'TensorFlow', 'Flask'],
+    github: 'https://github.com/AbiniveshMayilsamy',
+    live: '#',
+    previewType: 'tailor'
   },
   {
     num: '05',
-    title: 'E-Commerce Platforms',
-    sub: 'Full Stack Buying & Selling Hubs',
-    year: '2023',
-    tags: ['HTML5', 'CSS3', 'Node.js', 'Python'],
+    title: 'MERN Stack Applications',
+    sub: 'Scalable Full Stack Solutions & CMS Integrations',
+    year: '2024',
+    tags: ['MongoDB', 'Express', 'React', 'Node.js'],
     github: 'https://github.com/AbiniveshMayilsamy',
     live: '#',
-    previewType: 'ecommerce'
+    previewType: 'cms'
   }
 ];
 

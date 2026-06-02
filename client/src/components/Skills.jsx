@@ -5,42 +5,42 @@ import styles from './Skills.module.css';
 const services = [
   {
     num: '01',
-    title: 'Web Development',
-    icon: <FiLayout />,
-    desc: 'Engineering scalable, high-performance web applications with structured MVC architecture and robust data processing pipelines.',
+    title: 'Hardware & Embedded Systems',
+    icon: <FiCpu />,
+    desc: 'Building integrated systems that bridge hardware infrastructure and software applications using microcontrollers and robotics.',
     features: [
-      'Full Stack MERN applications',
-      'Custom backend APIs (Express, Flask)',
-      'Headless CMS integrations (Strapi, WordPress)',
-      'Database schema modeling & operations'
+      'ESP32 & NVIDIA Jetson Nano development',
+      'Robot Operating System (ROS 2)',
+      'Hardware-Software integration',
+      'Vision-based AGV systems (Neuro-Nav)'
     ],
-    tech: ['React.js', 'Node.js', 'Express.js', 'Flask', 'WordPress', 'Strapi', 'MongoDB', 'MySQL', 'Bootstrap']
+    tech: ['ESP32', 'NVIDIA Jetson Nano', 'ROS 2', 'Python', 'C++']
   },
   {
     num: '02',
-    title: 'Machine Learning & CV',
-    icon: <FiCpu />,
-    desc: 'Building intelligent algorithms, acoustic models, and computer vision utilities to process audio and visual inputs in real-time.',
+    title: 'Full Stack & Cloud',
+    icon: <FiSliders />,
+    desc: 'Engineering scalable web applications and cloud-native solutions with modern full stack technologies and AWS infrastructure.',
     features: [
-      'Speech signal voice emotion detection',
-      'Computer vision body measurement outline grids',
-      'RNN models & model training pipelines',
-      'Neural network architectures (TensorFlow)'
+      'MERN Stack web applications',
+      'Java Spring Boot backends',
+      'AWS Cloud services & deployment',
+      'Headless CMS integrations (Strapi, WordPress)'
     ],
-    tech: ['Python', 'TensorFlow', 'OpenCV', 'RNN Models', 'Computer Vision', 'ML Pipelines']
+    tech: ['React.js', 'Node.js', 'Express.js', 'Java Spring Boot', 'MongoDB', 'MySQL', 'AWS']
   },
   {
     num: '03',
-    title: 'Cloud & DevOps',
-    icon: <FiSliders />,
-    desc: 'Deploying backend services and establishing streamlined collaboration workflows using modern cloud and Linux system infrastructure.',
+    title: 'Machine Learning & AI',
+    icon: <FiLayout />,
+    desc: 'Developing intelligent systems including agentic AI architectures, voice emotion detection, and computer vision pipelines.',
     features: [
-      'Cloud service architectures (AWS, Azure)',
-      'Linux server system administration',
-      'Version control workflows & releases',
-      'Postman API verification suites'
+      'Agentic AI Loan Approval System',
+      'VocalMood — voice emotion detection (RNN)',
+      'Computer vision body measurement (OpenCV)',
+      'ML model training & inference pipelines'
     ],
-    tech: ['AWS', 'Azure', 'Linux', 'Git', 'GitHub', 'Postman', 'VS Code']
+    tech: ['Python', 'TensorFlow', 'OpenCV', 'RNN Models', 'ML Pipelines']
   }
 ];
 

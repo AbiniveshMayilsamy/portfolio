@@ -48,13 +48,13 @@ export default function About() {
         >
           <div className={styles.bioCard}>
             <p className={styles.para}>
-              I'm a Full Stack MERN Developer & Machine Learning Enthusiast pursuing my B.E. in Computer Science & Engineering at Sri Eshwar College of Engineering (SECE).
+              I'm a Computer Science Engineering student with a strong hardware-first background, specializing in bridging the gap between hardware infrastructure and software applications. With expertise in microcontrollers, robotics (ROS 2), and cloud services, I'm passionate about high-performance computing and solving complex problems through practical, hands-on development.
             </p>
             <p className={styles.para}>
-              Admitted via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%, my foundation combines strong hardware-software interaction knowledge with modern web architecture.
+              Admitted to B.E. CSE at Sri Eshwar College of Engineering via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%. Currently preparing for AWS Certified Cloud Practitioner (CLF-C02).
             </p>
             <p className={styles.para}>
-              Through hands-on internships at CODEHUB NEXUS and VENKTERTECH, I've developed production-ready web applications, integrated headless CMS systems, and engineered automated body measurement and emotion classification pipelines.
+              Hackathon highlights: 2nd Prize at Fiestaa'26 (KPR Institute) for Agentic AI Loan Approval System, Top 300 Finalist at FixForward Ideathon 2026, and participant at Bonfiglioli Smart Motion Hackathon 2.0 building the Neuro-Nav AGV.
             </p>
           </div>
 

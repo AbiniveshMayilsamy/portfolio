@@ -27,12 +27,14 @@ const education = [
 ];
 
 const achievements = [
-  { title: 'AWS Free Certification Course', org: 'Intellipaat Academy' },
+  { title: 'NPTEL Design Thinking - A Primer', org: 'NPTEL — Score: 65, Elite Status' },
+  { title: 'AWS Cloud Practitioner (CLF-C02)', org: 'Preparing — Amazon Web Services' },
+  { title: '2nd Prize — Agentic AI Loan System', org: 'Fiestaa\'26, KPR Institute of Engineering' },
+  { title: 'Top 300 Finalist', org: 'FixForward Ideathon 2026' },
+  { title: 'Bonfiglioli Smart Motion Hackathon 2.0', org: '48hr Hackathon — Chennai Institute of Technology' },
   { title: 'SQL Intermediate & Advanced', org: 'HackerRank' },
   { title: 'Java Fundamentals Badge', org: 'Oracle' },
   { title: 'Intro to ML, DL & Computer Vision', org: 'IIT Madras (Online)' },
-  { title: 'Java Basics Certification', org: 'Simplilearn' },
-  { title: 'Student Corporate Ambassador', org: 'TN Skills Naan Mudhalvan' }
 ];
 
 export default function Education() {
