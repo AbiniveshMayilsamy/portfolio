@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
 import styles from './Gallery.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const FILTERS = [
   { value: 'all', label: 'All' },
   { value: 'event', label: '🎪 Events' },
@@ -20,7 +22,7 @@ export default function Gallery() {
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await axios.get('/api/gallery', { timeout: 8000 });
+        const res = await axios.get(`${API_BASE}/api/gallery`, { timeout: 8000 });
         setItems(res.data);
       } catch (err) {
         console.error('Gallery fetch failed:', err);
