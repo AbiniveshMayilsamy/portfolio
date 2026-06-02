@@ -14,8 +14,8 @@ export default function About() {
       </div>
 
       <div className={styles.grid}>
-        {/* Photo Container */}
-        <motion.div 
+        {/* Photo */}
+        <motion.div
           className={styles.photoCol}
           initial={{ opacity: 0, x: -30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -24,17 +24,22 @@ export default function About() {
         >
           <div className={styles.photoFrame}>
             <div className={styles.photoOverlay} />
-            <div className={styles.avatarPlaceholder}>
-              <span>AM</span>
-            </div>
-            <div className={styles.badge}>
-              <span>TAMIL NADU, IN</span>
-            </div>
+            <img
+              src="/profile.jpeg"
+              alt="Abinivesh M"
+              className={styles.photo}
+              onError={e => {
+                e.target.style.display = 'none';
+                e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className={styles.avatarPlaceholder}><span>AM</span></div>
+            <div className={styles.badge}><span>TAMIL NADU, IN</span></div>
           </div>
         </motion.div>
 
-        {/* Biography & Stats */}
-        <motion.div 
+        {/* Text */}
+        <motion.div
           className={styles.textCol}
           initial={{ opacity: 0, x: 30 }}
           whileInView={{ opacity: 1, x: 0 }}
@@ -43,10 +48,10 @@ export default function About() {
         >
           <div className={styles.bioCard}>
             <p className={styles.para}>
-              I'm a **Full Stack MERN Developer &amp; Machine Learning Enthusiast** pursuing my B.E. in Computer Science &amp; Engineering at **Sri Eshwar College of Engineering (SECE)**.
+              I'm a Full Stack MERN Developer & Machine Learning Enthusiast pursuing my B.E. in Computer Science & Engineering at Sri Eshwar College of Engineering (SECE).
             </p>
             <p className={styles.para}>
-              Admitted via lateral entry after completing my Diploma in Computer Engineering at **Nachimuthu Polytechnic College** with **92.5%**, my foundation combines strong hardware-software interaction knowledge with modern web architecture.
+              Admitted via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%, my foundation combines strong hardware-software interaction knowledge with modern web architecture.
             </p>
             <p className={styles.para}>
               Through hands-on internships at CODEHUB NEXUS and VENKTERTECH, I've developed production-ready web applications, integrated headless CMS systems, and engineered automated body measurement and emotion classification pipelines.
