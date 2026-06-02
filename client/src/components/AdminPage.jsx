@@ -14,3 +14,4 @@ export default function AdminPage() {
   return <AdminDashboard token={token} onLogout={handleLogout} />;
 }
 
+

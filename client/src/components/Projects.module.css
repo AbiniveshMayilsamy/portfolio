@@ -204,7 +204,7 @@
 
 /* 2. Voice Wave Preview */
 .voiceBg {
-  background: radial-gradient(circle at center, rgba(0, 212, 255, 0.08) 0%, transparent 80%);
+  background: radial-gradient(circle at center, rgba(0,255,136, 0.08) 0%, transparent 80%);
 }
 
 .waveContainer {
@@ -224,11 +224,11 @@
 }
 
 .waveBar:nth-child(1) { height: 20px; animation-delay: 0.1s; }
-.waveBar:nth-child(2) { height: 50px; animation-delay: 0.3s; background-color: #00D4FF; }
+.waveBar:nth-child(2) { height: 50px; animation-delay: 0.3s; background-color: #00ff88; }
 .waveBar:nth-child(3) { height: 30px; animation-delay: 0.2s; }
-.waveBar:nth-child(4) { height: 70px; animation-delay: 0.4s; background-color: #00D4FF; }
+.waveBar:nth-child(4) { height: 70px; animation-delay: 0.4s; background-color: #00ff88; }
 .waveBar:nth-child(5) { height: 40px; animation-delay: 0.15s; }
-.waveBar:nth-child(6) { height: 60px; animation-delay: 0.35s; background-color: #00D4FF; }
+.waveBar:nth-child(6) { height: 60px; animation-delay: 0.35s; background-color: #00ff88; }
 .waveBar:nth-child(7) { height: 25px; animation-delay: 0.25s; }
 
 @keyframes pulse-wave {
@@ -259,8 +259,8 @@
 }
 
 .nodePoint:nth-child(3) {
-  background-color: #00D4FF;
-  box-shadow: 0 0 10px #00D4FF;
+  background-color: #00ff88;
+  box-shadow: 0 0 10px #00ff88;
 }
 
 .nodeLine {
@@ -322,7 +322,7 @@
 
 /* 5. Ecommerce Preview */
 .ecomBg {
-  background: radial-gradient(circle at center, rgba(0, 212, 255, 0.05) 0%, transparent 80%);
+  background: radial-gradient(circle at center, rgba(0,255,136, 0.05) 0%, transparent 80%);
 }
 
 .ecomLayout {
@@ -405,3 +405,4 @@
     font-size: 0.8rem;
   }
 }
+

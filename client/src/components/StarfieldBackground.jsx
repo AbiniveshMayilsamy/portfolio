@@ -32,7 +32,7 @@ export default function StarfieldBackground() {
         if (s.o < 0.05) { s.speed = Math.abs(s.speed); }
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(0, 212, 255, ${s.o})`;
+        ctx.fillStyle = `rgba(153, 255, 0, ${s.o})`;
         ctx.fill();
       });
       animId = requestAnimationFrame(draw);
@@ -50,10 +50,11 @@ export default function StarfieldBackground() {
       {/* Deep gradient bg */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'radial-gradient(ellipse at 40% 40%, #001428 0%, #000a18 40%, #000000 100%)',
+        background: 'radial-gradient(ellipse at 40% 40%, #001a08 0%, #000a04 40%, #000000 100%)',
       }} />
       {/* Canvas stars */}
       <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, opacity: 0.9 }} />
     </div>
   );
 }
+

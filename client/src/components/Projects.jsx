@@ -121,7 +121,7 @@ export default function Projects() {
               <path d="M20 20 L40 10 L60 10 L80 20 L75 35 L68 35 L68 85 L32 85 L32 35 L25 35 Z" 
                 fill="none" stroke="var(--accent)" strokeWidth="1" strokeDasharray="3, 3" />
               {/* Scanning laser line */}
-              <line x1="10" y1="50" x2="90" y2="50" stroke="#00D4FF" strokeWidth="1.5" className={styles.laserAnim} />
+              <line x1="10" y1="50" x2="90" y2="50" stroke="#00ff88" strokeWidth="1.5" className={styles.laserAnim} />
               {/* Measurement indicators */}
               <circle cx="40" cy="10" r="2" fill="var(--accent)" />
               <circle cx="60" cy="10" r="2" fill="var(--accent)" />
@@ -279,3 +279,4 @@ export default function Projects() {
     </section>
   );
 }
+

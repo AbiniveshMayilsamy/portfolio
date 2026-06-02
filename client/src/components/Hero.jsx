@@ -28,6 +28,17 @@ export default function Hero() {
           Cloud Engineer &amp; Full Stack Developer &amp; Linux Admin Aspirant
         </motion.p>
 
+        {/* Big Name */}
+        <motion.div
+          className={styles.nameWrap}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.05 }}
+        >
+          <span className={styles.nameFirst}>ABINIVESH</span>
+          <span className={styles.nameLast}>MAYILSAMY</span>
+        </motion.div>
+
         <motion.h1 
           className={styles.title}
           initial={{ opacity: 0, y: 25 }}
@@ -36,25 +47,18 @@ export default function Hero() {
         >
           I build{' '}
           <em className={styles.serifWord}>
-            digital
+            scalable
             <svg className={styles.underline} viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
               <path d="M3 9 Q 45 2 95 7 T 197 9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </em>{' '}
+          systems{' '}
           <em className={styles.serifWord}>
-            products
+            on the cloud.
             <svg className={styles.underline} viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
               <path d="M3 9 Q 45 2 95 7 T 197 9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </em>{' '}
-          for{' '}
-          <em className={styles.serifWord}>
-            ambitious
-            <svg className={styles.underline} viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M3 9 Q 45 2 95 7 T 197 9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </em>{' '}
-          brands.
+          </em>
         </motion.h1>
 
         <motion.p 
@@ -133,3 +137,4 @@ export default function Hero() {
     </section>
   );
 }
+

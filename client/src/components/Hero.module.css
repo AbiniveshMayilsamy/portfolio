@@ -28,7 +28,7 @@
   right: 10%;
   width: 35vw;
   height: 35vw;
-  background: radial-gradient(circle, rgba(0, 212, 255, 0.04) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(0,255,136, 0.04) 0%, transparent 65%);
   filter: blur(80px);
   pointer-events: none;
   z-index: 1;
@@ -57,7 +57,7 @@
   border-radius: 50%;
   padding: 3px;
   background: linear-gradient(135deg, var(--accent), var(--accent3));
-  box-shadow: 0 0 30px rgba(0,212,255,0.3);
+  box-shadow: 0 0 30px rgba(0,255,136,0.3);
 }
 
 .photo {
@@ -81,6 +81,36 @@
   font-size: 2rem;
   font-weight: 900;
   color: var(--accent);
+}
+
+/* Big Name */
+.nameWrap {
+  display: flex;
+  align-items: baseline;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.nameFirst {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 0 40px rgba(0,255,136,0.25);
+}
+
+.nameLast {
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--accent), #fff 60%, var(--accent3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px rgba(0,255,136,0.4));
 }
 
 .eyebrow {
@@ -236,3 +266,4 @@
     display: none;
   }
 }
+
