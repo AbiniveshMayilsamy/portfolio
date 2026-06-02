@@ -15,14 +15,16 @@ export default function Gallery() {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activePhoto, setActivePhoto] = useState(null);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const fetchGallery = async () => {
       try {
-        const res = await axios.get('/api/gallery');
+        const res = await axios.get('/api/gallery', { timeout: 8000 });
         setItems(res.data);
       } catch (err) {
-        console.error('Error fetching gallery items:', err);
+        console.error('Gallery fetch failed:', err);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -70,7 +72,15 @@ export default function Gallery() {
             <div className={styles.spinner} />
             <p>Loading achievements...</p>
           </div>
-        ) : filteredItems.length > 0 ? (
+        ) : error || filteredItems.length === 0 ? (
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIcon}>📸</div>
+            <h3 className={styles.emptyTitle}>No highlights here yet</h3>
+            <p className={styles.emptyDesc}>
+              Achievements and events are being uploaded. Please check back later!
+            </p>
+          </div>
+        ) : (
           <div className={styles.grid}>
             {filteredItems.map((item) => (
               <motion.div
@@ -97,14 +107,6 @@ export default function Gallery() {
                 </div>
               </motion.div>
             ))}
-          </div>
-        ) : (
-          <div className={styles.emptyState}>
-            <div className={styles.emptyIcon}>📸</div>
-            <h3 className={styles.emptyTitle}>No highlights here yet</h3>
-            <p className={styles.emptyDesc}>
-              Achievements and events are being uploaded. Please check back later!
-            </p>
           </div>
         )}
       </motion.div>
