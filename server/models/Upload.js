@@ -1,13 +1,40 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db');
 
-const uploadSchema = new mongoose.Schema({
-  filename: { type: String, required: true },
-  originalName: { type: String, required: true },
-  description: { type: String, default: '' },
-  mimetype: { type: String },
-  size: { type: Number },
-  cloudinaryId: { type: String, default: '' },
-  createdAt: { type: Date, default: Date.now }
+const Upload = sequelize.define('Upload', {
+  _id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    field: 'id'
+  },
+  filename: {
+    type: DataTypes.STRING(500),
+    allowNull: false,
+    comment: 'Relative URL path/suffix e.g. files/1717250000-a3f2b1.pdf',
+  },
+  originalName: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+    field: 'original_name',
+  },
+  description: {
+    type: DataTypes.TEXT,
+    defaultValue: '',
+  },
+  mimetype: {
+    type: DataTypes.STRING(100),
+    field: 'mime_type',
+  },
+  size: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    field: 'size',
+  },
+}, {
+  tableName: 'uploads',
+  timestamps: true,
+  underscored: true,
 });
 
-module.exports = mongoose.model('Upload', uploadSchema);
+module.exports = Upload;

@@ -1,51 +1,110 @@
 require('dotenv').config();
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
 const nodemailer = require('nodemailer');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
-const { v2: cloudinary } = require('cloudinary');
-const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const path = require('path');
-const Contact = require('./models/Contact');
-const Upload = require('./models/Upload');
-const Gallery = require('./models/Gallery');
+const fs = require('fs');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const { Contact, Gallery, Upload, sequelize } = require('./models');
+
+// ── Environment Variable Validation ───────────────────────────
+const isProduction = process.env.NODE_ENV === 'production';
+const REQUIRED_ENV = isProduction 
+  ? ['DATABASE_URL', 'JWT_SECRET', 'EMAIL_USER', 'EMAIL_PASS']
+  : ['EMAIL_USER', 'EMAIL_PASS']; // Gmail credentials required, rest defaults allowed locally
+const missingEnv = REQUIRED_ENV.filter(key => !process.env[key]);
+if (missingEnv.length > 0) {
+  console.error(`[CONFIG ERROR] Missing required environment variables: ${missingEnv.join(', ')}`);
+  process.exit(1);
+}
 
 const app = express();
-app.use(cors());
+
+// ── Security Headers & CORS ────────────────────────────────────
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+      fontSrc: ["'self'", "https://fonts.gstatic.com"],
+      connectSrc: ["'self'", "http://localhost:5000", "http://localhost:3000"],
+      imgSrc: ["'self'", "data:"],
+    },
+  },
+}));
+
+// CORS Configuration: Restrict origin in production if configured
+const corsOptions = {
+  origin: process.env.ALLOWED_ORIGIN || '*',
+  optionsSuccessStatus: 200
+};
+app.use(cors(corsOptions));
 app.use(express.json());
 
-// MongoDB
-mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/portfolio')
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.log('MongoDB error:', err));
+// ── Rate Limiting ──────────────────────────────────────────────
+// Global rate limiter (15 mins, max 200 per IP)
+const globalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 200,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests from this IP, please try again later.' }
+});
+app.use(globalLimiter);
 
-// Cloudinary config
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
+// Strict rate limiter for form submissions / logins (15 mins, max 5 per IP)
+const strictLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests. Please try again after 15 minutes.' }
 });
 
-// Multer — Cloudinary storage for images
-const imageStorage = new CloudinaryStorage({
-  cloudinary,
-  params: { folder: 'portfolio/gallery', allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'] }
+// Ensure uploads directories exist
+const uploadsBaseDir = path.join(__dirname, 'uploads');
+const galleryDir = path.join(uploadsBaseDir, 'gallery');
+const filesDir = path.join(uploadsBaseDir, 'files');
+if (!fs.existsSync(galleryDir)) fs.mkdirSync(galleryDir, { recursive: true });
+if (!fs.existsSync(filesDir)) fs.mkdirSync(filesDir, { recursive: true });
+
+// Multer Local Disk Storage Configuration
+const imageStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, galleryDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
 });
 
-// Multer — Cloudinary storage for files
-const fileStorage = new CloudinaryStorage({
-  cloudinary,
-  params: (req, file) => ({
-    folder: 'portfolio/files',
-    resource_type: 'auto',
-    public_id: `${Date.now()}-${file.originalname.replace(/\s/g, '_')}`
-  })
+const fileStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, filesDir);
+  },
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
+  }
 });
 
-const uploadImage = multer({ storage: imageStorage });
-const uploadFile = multer({ storage: fileStorage });
+const uploadImage = multer({ 
+  storage: imageStorage,
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
+
+const uploadFile = multer({ 
+  storage: fileStorage,
+  limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit
+});
+
+// Serve Local Uploads Statically
+app.use('/uploads', express.static(uploadsBaseDir));
 
 // JWT auth middleware
 const auth = (req, res, next) => {
@@ -60,7 +119,7 @@ const auth = (req, res, next) => {
 };
 
 // ── Admin login ──────────────────────────────────────────────
-app.post('/api/admin/login', (req, res) => {
+app.post('/api/admin/login', strictLimiter, (req, res) => {
   const { password } = req.body;
   if (password !== (process.env.ADMIN_PASS || 'admin123'))
     return res.status(401).json({ error: 'Wrong password' });
@@ -73,15 +132,17 @@ app.post('/api/admin/gallery', auth, uploadImage.single('image'), async (req, re
   try {
     const { title, description, category } = req.body;
     if (!req.file) return res.status(400).json({ error: 'Image required' });
-    const doc = new Gallery({
+    
+    // Store relative path e.g. /uploads/gallery/unique-filename.jpg
+    const relativePath = `/uploads/gallery/${req.file.filename}`;
+    
+    const doc = await Gallery.create({
       title: title || req.file.originalname,
       description: description || '',
       category: category || 'photo',
-      filename: req.file.path,        // Cloudinary URL
-      originalName: req.file.originalname,
-      cloudinaryId: req.file.filename // public_id
+      filename: relativePath,
+      originalName: req.file.originalname
     });
-    await doc.save();
     res.json({ success: true, item: doc });
   } catch (err) {
     console.error(err);
@@ -90,26 +151,45 @@ app.post('/api/admin/gallery', auth, uploadImage.single('image'), async (req, re
 });
 
 app.get('/api/admin/gallery', auth, async (req, res) => {
-  const items = await Gallery.find().sort({ createdAt: -1 });
-  res.json(items);
+  try {
+    const items = await Gallery.findAll({ order: [['createdAt', 'DESC']] });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch gallery' });
+  }
 });
 
 app.get('/api/gallery', async (req, res) => {
-  const { category } = req.query;
-  const filter = category ? { category } : {};
-  const items = await Gallery.find(filter).sort({ createdAt: -1 });
-  res.json(items);
+  try {
+    const { category } = req.query;
+    const filter = category ? { category } : {};
+    const items = await Gallery.findAll({
+      where: filter,
+      order: [['createdAt', 'DESC']]
+    });
+    res.json(items);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch gallery' });
+  }
 });
 
 app.delete('/api/admin/gallery/:id', auth, async (req, res) => {
   try {
-    const doc = await Gallery.findByIdAndDelete(req.params.id);
+    const doc = await Gallery.findByPk(req.params.id);
     if (!doc) return res.status(404).json({ error: 'Not found' });
-    if (doc.cloudinaryId) {
-      await cloudinary.uploader.destroy(doc.cloudinaryId).catch(() => {});
-    }
+    
+    // Delete physical file from disk
+    const relativePath = doc.filename.replace(/^\//, ''); // remove leading slash
+    const filePath = path.join(__dirname, relativePath);
+    
+    fs.unlink(filePath, (err) => {
+      if (err) console.error('Failed to delete file from disk:', err);
+    });
+
+    await doc.destroy();
     res.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Delete failed' });
   }
 });
@@ -117,51 +197,95 @@ app.delete('/api/admin/gallery/:id', auth, async (req, res) => {
 // ── File uploads ─────────────────────────────────────────────
 app.post('/api/admin/upload', auth, uploadFile.single('file'), async (req, res) => {
   try {
-    const doc = new Upload({
-      filename: req.file.path,         // Cloudinary URL
+    if (!req.file) return res.status(400).json({ error: 'File required' });
+    
+    // Storing relative path from uploads folder (e.g. files/filename)
+    // for direct resolution in href={`/uploads/${f.filename}`}
+    const dbFilename = `files/${req.file.filename}`;
+    
+    const doc = await Upload.create({
+      filename: dbFilename,
       originalName: req.file.originalname,
       description: req.body.description || '',
       mimetype: req.file.mimetype,
-      size: req.file.size || 0,
-      cloudinaryId: req.file.filename
+      size: req.file.size || 0
     });
-    await doc.save();
     res.json({ success: true, file: doc });
-  } catch {
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Upload failed' });
   }
 });
 
 app.get('/api/admin/uploads', auth, async (req, res) => {
-  const files = await Upload.find().sort({ createdAt: -1 });
-  res.json(files);
+  try {
+    const files = await Upload.findAll({ order: [['createdAt', 'DESC']] });
+    res.json(files);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch uploads' });
+  }
 });
 
 app.get('/api/uploads', async (req, res) => {
-  const files = await Upload.find().sort({ createdAt: -1 });
-  res.json(files);
+  try {
+    const files = await Upload.findAll({ order: [['createdAt', 'DESC']] });
+    res.json(files);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch uploads' });
+  }
 });
 
 app.delete('/api/admin/uploads/:id', auth, async (req, res) => {
   try {
-    const doc = await Upload.findByIdAndDelete(req.params.id);
+    const doc = await Upload.findByPk(req.params.id);
     if (!doc) return res.status(404).json({ error: 'Not found' });
-    if (doc.cloudinaryId) {
-      await cloudinary.uploader.destroy(doc.cloudinaryId, { resource_type: 'auto' }).catch(() => {});
-    }
+    
+    // Delete physical file from disk
+    const filePath = path.join(__dirname, 'uploads', doc.filename);
+    
+    fs.unlink(filePath, (err) => {
+      if (err) console.error('Failed to delete file from disk:', err);
+    });
+
+    await doc.destroy();
     res.json({ success: true });
-  } catch {
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ error: 'Delete failed' });
   }
 });
 
 // ── Contact form ─────────────────────────────────────────────
-app.post('/api/contact', async (req, res) => {
+app.post('/api/contact', strictLimiter, async (req, res, next) => {
   try {
     const { name, email, message } = req.body;
     if (!name || !email || !message)
-      return res.status(400).json({ error: 'All fields required' });
-    await new Contact({ name, email, message }).save();
+      return res.status(400).json({ error: 'All fields required.' });
+
+    // ── Strict Input Validation ──
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Please provide a valid email address.' });
+    }
+    if (name.trim().length < 2 || name.length > 100) {
+      return res.status(400).json({ error: 'Name must be between 2 and 100 characters.' });
+    }
+    if (message.trim().length < 10 || message.length > 3000) {
+      return res.status(400).json({ error: 'Message must be between 10 and 3000 characters.' });
+    }
+
+    // ── Input Sanitization (XSS Mitigation) ──
+    const sanitize = (str) => str.replace(/</g, '&lt;').replace(/>/g, '&gt;').trim();
+    const sanitizedName = sanitize(name);
+    const sanitizedEmail = email.trim();
+    const sanitizedMessage = sanitize(message);
+
+    await Contact.create({ 
+      name: sanitizedName, 
+      email: sanitizedEmail, 
+      message: sanitizedMessage 
+    });
+    
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
@@ -169,19 +293,22 @@ app.post('/api/contact', async (req, res) => {
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
       to: process.env.EMAIL_USER,
-      subject: `Portfolio Contact from ${name}`,
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
+      subject: `Portfolio Contact from ${sanitizedName}`,
+      text: `Name: ${sanitizedName}\nEmail: ${sanitizedEmail}\nMessage: ${sanitizedMessage}`
     });
     res.json({ success: true });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Server error' });
+    next(err); // Pass to centralized error handler
   }
 });
 
 app.get('/api/admin/contacts', auth, async (req, res) => {
-  const contacts = await Contact.find().sort({ createdAt: -1 });
-  res.json(contacts);
+  try {
+    const contacts = await Contact.findAll({ order: [['createdAt', 'DESC']] });
+    res.json(contacts);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch contacts' });
+  }
 });
 
 app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
@@ -193,5 +320,27 @@ app.get('/{*path}', (req, res) => {
   res.sendFile(path.join(clientBuild, 'index.html'));
 });
 
+// ── Centralized Error Handling Middleware ──────────────────────
+app.use((err, req, res, next) => {
+  console.error('[SERVER ERROR]', err.stack || err);
+  
+  const statusCode = err.status || 500;
+  const isProd = process.env.NODE_ENV === 'production';
+  
+  res.status(statusCode).json({
+    error: isProd ? 'An unexpected error occurred on the server.' : err.message
+  });
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+// Authenticate Sequelize & start server
+sequelize.authenticate()
+  .then(() => {
+    console.log('Database connected successfully.');
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+  })
+  .catch(err => {
+    console.error('Database connection failed:', err);
+    process.exit(1);
+  });

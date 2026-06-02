@@ -1,168 +1,152 @@
 .grid {
   display: grid;
-  grid-template-columns: 5fr 7fr;
+  grid-template-columns: 1fr 1.6fr;
   gap: 4rem;
   align-items: center;
 }
 
-/* Photo */
-.photoCol { display: flex; justify-content: center; }
+.photoCol {
+  display: flex;
+  justify-content: center;
+}
 
-.photoWrap {
+.photoFrame {
   position: relative;
-  width: 320px;
-  height: 400px;
-}
-
-.photoRings {
-  position: absolute;
-  inset: 0;
-}
-
-.ring1 {
-  position: absolute;
-  inset: -12px;
-  border: 1px solid rgba(181,242,61,0.15);
+  width: 100%;
+  max-width: 380px;
+  aspect-ratio: 1;
   border-radius: 20px;
-  transition: all 0.5s;
-}
-
-.ring2 {
-  position: absolute;
-  inset: -24px;
-  border: 1px solid rgba(181,242,61,0.06);
-  border-radius: 28px;
-  transition: all 0.7s;
-}
-
-.photoWrap:hover .ring1 { inset: -18px; }
-.photoWrap:hover .ring2 { inset: -32px; }
-
-.photo {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  border-radius: 16px;
-  border: 2px solid rgba(255,255,255,0.08);
-  display: block;
-  filter: grayscale(20%);
-  transition: filter 0.5s, transform 0.5s;
-  box-shadow: 0 0 40px rgba(181,242,61,0.1);
-}
-
-.photoWrap:hover .photo {
-  filter: grayscale(0%);
-  transform: scale(1.02);
-}
-
-.photoFallback {
-  display: none;
-  width: 100%;
-  height: 100%;
-  border-radius: 16px;
-  background: var(--bg3);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 4rem;
-  font-weight: 900;
-  color: var(--accent);
-  border: 2px solid rgba(181,242,61,0.2);
+  overflow: hidden;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  transition: var(--transition);
 }
 
 .photoOverlay {
   position: absolute;
-  bottom: 16px;
-  left: 16px;
-  right: 16px;
-  padding: 10px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.04);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-  opacity: 0;
-  transform: translateY(8px);
-  transition: all 0.4s;
-  text-align: center;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 60%, rgba(10, 10, 11, 0.8) 100%);
+  z-index: 2;
 }
 
-.photoWrap:hover .photoOverlay {
-  opacity: 1;
-  transform: translateY(0);
+.photoFrame:hover {
+  border-color: var(--accent);
+  box-shadow: 0 15px 35px rgba(153, 255, 0, 0.05);
+  transform: scale(1.02);
 }
 
-.photoOverlay p {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: #fff;
+.avatarPlaceholder {
+  font-family: var(--font-sans);
+  font-size: 5rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: -0.05em;
+  opacity: 0.15;
+  transition: var(--transition);
 }
 
-/* Text */
-.textCol { display: flex; flex-direction: column; gap: 2rem; }
-
-.card {
-  position: relative;
-  padding: 2rem 2.5rem;
-  border-radius: 24px;
-  border: 1px solid rgba(255,255,255,0.05);
-  background: rgba(255,255,255,0.02);
-  backdrop-filter: blur(20px);
-  overflow: hidden;
+.photoFrame:hover .avatarPlaceholder {
+  opacity: 0.35;
+  color: var(--accent);
 }
 
-.accentBar {
+.badge {
   position: absolute;
-  left: 0;
-  top: 2rem;
-  width: 3px;
-  height: 5rem;
-  background: linear-gradient(to bottom, var(--accent), transparent);
-  border-radius: 2px;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  z-index: 3;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border);
+  padding: 0.4rem 0.85rem;
+  border-radius: 99px;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent);
 }
 
-.desc {
-  color: #94a3b8;
-  font-size: 1rem;
-  line-height: 1.9;
-  margin-bottom: 1rem;
-  font-style: italic;
-}
-
-.desc:last-child { margin-bottom: 0; }
-
-/* Stats */
-.stats {
+.textCol {
   display: flex;
-  align-items: center;
-  gap: 2rem;
+  flex-direction: column;
+  gap: 2.5rem;
 }
 
-.stat { display: flex; flex-direction: column; gap: 4px; }
+.bioCard {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+}
+
+.para {
+  font-size: 1.05rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.para strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.para:not(:last-child) {
+  margin-bottom: 1.5rem;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.statCard {
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: var(--transition);
+}
+
+.statCard:hover {
+  border-color: var(--border-hover);
+  background-color: var(--bg-card);
+  transform: translateY(-2px);
+}
 
 .statNum {
-  font-size: 2rem;
-  font-weight: 900;
-  color: #fff;
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
 }
 
 .statLabel {
-  font-size: 0.7rem;
-  color: #64748b;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-weight: 700;
-}
-
-.divider {
-  width: 1px;
-  height: 40px;
-  background: rgba(255,255,255,0.08);
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
 @media (max-width: 900px) {
-  .grid { grid-template-columns: 1fr; gap: 2.5rem; }
-  .photoWrap { width: 260px; height: 320px; }
-  .photoCol { order: -1; }
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .photoFrame {
+    max-width: 300px;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .bioCard {
+    padding: 1.75rem;
+  }
 }

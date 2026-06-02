@@ -13,3 +13,4 @@ export default function AdminPage() {
   if (!token) return <AdminLogin onLogin={setToken} />;
   return <AdminDashboard token={token} onLogout={handleLogout} />;
 }
+

@@ -8,6 +8,7 @@ import Experience from './components/Experience';
 import Education from './components/Education';
 import Gallery from './components/Gallery';
 import Marquee from './components/Marquee';
+import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AdminPage from './components/AdminPage';
@@ -17,6 +18,7 @@ import './index.css';
 function Portfolio() {
   return (
     <>
+      <div className="grain" aria-hidden="true" />
       <StarfieldBackground />
       <Navbar />
       <main style={{ position: 'relative', zIndex: 1 }}>
@@ -28,6 +30,7 @@ function Portfolio() {
         <Experience />
         <Education />
         <Gallery />
+        <FAQ />
         <Contact />
       </main>
       <Footer />
@@ -47,3 +50,4 @@ function App() {
 }
 
 export default App;
+

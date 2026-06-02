@@ -1,110 +1,152 @@
-.contactSection {
-  background: linear-gradient(180deg, transparent, rgba(181,242,61,0.03), transparent);
-}
-
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 48px;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 4rem;
   align-items: start;
 }
 
+.infoCol {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
 .intro {
-  font-size: 0.97rem;
-  color: var(--text2);
-  line-height: 1.9;
-  margin-bottom: 32px;
+  font-size: 1.15rem;
+  color: var(--text-muted);
+  line-height: 1.7;
+}
+
+.intro strong {
+  color: var(--text);
 }
 
 .contactLinks {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.25rem;
 }
 
-.contactLink {
+.contactCard {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 16px;
-  background: var(--card);
+  gap: 1.25rem;
+  background-color: var(--bg-card);
   border: 1px solid var(--border);
+  padding: 1.5rem;
   border-radius: 12px;
-  transition: all 0.3s;
+  transition: var(--transition);
 }
 
-.contactLink:hover {
+.contactCard:hover {
   border-color: var(--accent);
-  transform: translateX(4px);
+  background-color: var(--bg-card-hover);
+  transform: translateY(-2px);
 }
 
-.contactIcon {
-  font-size: 1.3rem;
+.iconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: var(--accent);
-  flex-shrink: 0;
+  font-size: 1.15rem;
+  transition: var(--transition);
 }
 
-.contactLabel {
-  font-size: 0.75rem;
-  color: var(--text2);
+.contactCard:hover .iconBox {
+  background-color: rgba(153, 255, 0, 0.08);
+  border-color: var(--accent);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 2px;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
-.contactValue {
-  font-size: 0.88rem;
+.value {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--text);
-  font-weight: 500;
+}
+
+/* Form Column */
+.formCol {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.5rem;
+  position: relative;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 1.75rem;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 0.5rem;
 }
 
-.field label {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text2);
+.fieldLabel {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
-.field input,
-.field textarea {
-  background: var(--bg3);
+.input,
+.textarea {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 12px 16px;
+  padding: 1rem 1.25rem;
   color: var(--text);
-  font-size: 0.92rem;
-  font-family: inherit;
-  transition: border-color 0.3s;
-  resize: vertical;
-}
-
-.field input:focus,
-.field textarea:focus {
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
   outline: none;
+  transition: var(--transition);
+}
+
+.input:focus,
+.textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(181,242,61, 0.08);
+  background-color: rgba(153, 255, 0, 0.01);
+  box-shadow: 0 0 12px rgba(153, 255, 0, 0.1);
 }
 
-.field input::placeholder,
-.field textarea::placeholder {
-  color: var(--text2);
-  opacity: 0.6;
+.success {
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  color: var(--accent);
+  font-weight: 500;
 }
 
-.success { color: #4ade80; font-size: 0.88rem; }
-.error { color: #f87171; font-size: 0.88rem; }
-
-@media (max-width: 768px) {
-  .grid { grid-template-columns: 1fr; gap: 32px; }
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .formCol {
+    padding: 1.75rem;
+  }
 }

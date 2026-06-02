@@ -1,75 +1,123 @@
 import { motion } from 'framer-motion';
-import { FiGithub, FiLinkedin, FiMail, FiDownload, FiArrowRight } from 'react-icons/fi';
+import { FiZap, FiAward, FiGithub, FiArrowRight } from 'react-icons/fi';
 import styles from './Hero.module.css';
 
 export default function Hero() {
+  const scrollTo = (id) => {
+    const target = document.getElementById(id);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className={styles.hero} id="hero">
-      <div className={styles.blob1} />
-      <div className={styles.blob2} />
+      {/* Glow Backdrops inside Section */}
+      <div className={styles.heroBgLight} aria-hidden="true" />
+      <div className={styles.heroBgLight2} aria-hidden="true" />
+      
+      <div className={styles.content}>
+        <motion.p 
+          className={styles.eyebrow}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className={styles.eyebrowBar} aria-hidden="true"></span>
+          <span className={styles.eyebrowTag}>[01]</span>
+          Full Stack Developer &amp; ML Engineer
+        </motion.p>
 
-      <div className={styles.inner}>
-        {/* Left */}
-        <motion.div className={styles.left} initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7 }}>
-          <span className={styles.tag}>WELCOME TO MY UNIVERSE</span>
+        <motion.h1 
+          className={styles.title}
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          I build{' '}
+          <em className={styles.serifWord}>
+            digital
+            <svg className={styles.underline} viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M3 9 Q 45 2 95 7 T 197 9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </em>{' '}
+          <em className={styles.serifWord}>
+            products
+            <svg className={styles.underline} viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M3 9 Q 45 2 95 7 T 197 9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </em>{' '}
+          for{' '}
+          <em className={styles.serifWord}>
+            ambitious
+            <svg className={styles.underline} viewBox="0 0 200 14" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M3 9 Q 45 2 95 7 T 197 9" stroke="currentColor" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </em>{' '}
+          brands.
+        </motion.h1>
 
-          <h1 className={styles.heading}>
-            Turning <span className={styles.accent}>Ideas</span><br />
-            <span className={styles.accent2}>Into Reality</span>
-          </h1>
+        <motion.p 
+          className={styles.sub}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          MERN Stack Developer &amp; Machine Learning Enthusiast — creating custom web experiences, intelligent systems, and automated workflows.
+        </motion.p>
 
-          <p className={styles.sub}>
-            I'm <strong>Abinivesh M</strong>, a passionate{' '}
-            <span className={styles.accentText}>Cloud & DevOps Engineer</span>
-            <br />dedicated to building scalable, high-performance systems.
-          </p>
-
-          <div className={styles.socials}>
-            <a href="https://github.com/AbiniveshMayilsamy" target="_blank" rel="noreferrer" className={styles.social}><FiGithub size={22} /></a>
-            <a href="https://linkedin.com/in/abiniveshm" target="_blank" rel="noreferrer" className={styles.social}><FiLinkedin size={22} /></a>
-            <a href="mailto:abiniveshmayilsamy1@gmail.com" className={styles.social}><FiMail size={22} /></a>
-          </div>
-
-          <div className={styles.ctas}>
-            <a href="#contact" className={styles.btnPrimary}>
-              Let's Collaborate <FiArrowRight />
-            </a>
-            <a href="/resume.pdf" download className={styles.btnOutline}>
-              Get Resume <FiDownload />
-            </a>
-          </div>
+        <motion.div 
+          className={styles.actions}
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+        >
+          <button 
+            type="button" 
+            className="btn shiny-cta" 
+            onClick={() => scrollTo('contact')}
+          >
+            <span>Let's Connect &nbsp; <FiArrowRight /></span>
+          </button>
+          
+          <button 
+            type="button" 
+            className="btn btn-secondary" 
+            onClick={() => scrollTo('projects')}
+          >
+            <span className="btn-dot" aria-hidden="true"></span>
+            <span>Selected Work</span>
+          </button>
         </motion.div>
 
-        {/* Right — Code Block */}
-        <motion.div className={styles.right} initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.7, delay: 0.2 }}>
-          <div className={styles.codeCard}>
-            <div className={styles.codeBar}>
-              <div className={styles.dots}>
-                <span className={styles.dot1} />
-                <span className={styles.dot2} />
-                <span className={styles.dot3} />
-              </div>
-              <span className={styles.fileName}><span className={styles.pulse} />Portfolio.ts</span>
-            </div>
-            <div className={styles.codeBody}>
-              <code>
-                {[
-                  { n: '01', c: <><span className={styles.kw}>const</span> <span className={styles.var}>developer</span> = {'{'}</> },
-                  { n: '02', c: <span className={styles.ml}><span className={styles.prop}>name:</span> <span className={styles.str}>'Abinivesh M'</span>,</span> },
-                  { n: '03', c: <span className={styles.ml}><span className={styles.prop}>role:</span> <span className={styles.str}>'Cloud & DevOps'</span>,</span> },
-                  { n: '04', c: <span className={styles.ml}><span className={styles.prop}>skills:</span> [<span className={styles.str}>'AWS', 'Azure', 'MERN'</span>],</span> },
-                  { n: '05', c: <span className={styles.ml}><span className={styles.prop}>passionate:</span> <span className={styles.bool}>true</span>,</span> },
-                  { n: '06', c: <span className={styles.ml}><span className={styles.prop}>motto:</span> <span className={styles.str2}>"Build with Purpose"</span></span> },
-                  { n: '07', c: '};' },
-                  { n: '08', c: <><span className={styles.kw}>developer</span>.<span className={styles.var}>showcase</span>();</> },
-                ].map(({ n, c }) => (
-                  <div key={n} className={styles.codeLine}>
-                    <span className={styles.lineNum}>{n}</span>
-                    <p>{c}</p>
-                  </div>
-                ))}
-              </code>
-            </div>
+        {/* Metrics Row */}
+        <motion.div 
+          className={styles.stats}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.4 }}
+          aria-label="Key metrics"
+        >
+          <div className={styles.stat}>
+            <span className={styles.statIcon} aria-hidden="true"><FiGithub /></span>
+            <span className={styles.statNum}>200+</span>
+            <span className={styles.statLabel}>Contributions</span>
+          </div>
+
+          <span className={styles.statSep} aria-hidden="true" />
+
+          <div className={styles.stat}>
+            <span className={styles.statIcon} aria-hidden="true"><FiAward /></span>
+            <span className={styles.statNum}>Naan Mudhalvan</span>
+            <span className={styles.statLabel}>Corporate Ambassador</span>
+          </div>
+
+          <span className={styles.statSep} aria-hidden="true" />
+
+          <div className={styles.stat}>
+            <span className={styles.statIcon} aria-hidden="true"><FiZap /></span>
+            <span className={styles.statNum}>100</span>
+            <span className={styles.statLabel}>PageSpeed score</span>
           </div>
         </motion.div>
       </div>
