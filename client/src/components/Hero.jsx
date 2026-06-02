@@ -17,6 +17,19 @@ export default function Hero() {
       <div className={styles.heroBgLight2} aria-hidden="true" />
       
       <div className={styles.content}>
+        {/* Profile Photo */}
+        <motion.div
+          className={styles.photoWrap}
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <div className={styles.photoRing}>
+            <img src="/profile.jpeg" alt="Abinivesh M" className={styles.photo}
+              onError={e => { e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }} />
+            <div className={styles.photoFallback}><span>AM</span></div>
+          </div>
+        </motion.div>
         <motion.p 
           className={styles.eyebrow}
           initial={{ opacity: 0, y: 15 }}

@@ -41,6 +41,46 @@
   margin: 0 auto;
   padding: 0 2rem;
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* Profile Photo */
+.photoWrap {
+  margin-bottom: 2rem;
+}
+
+.photoRing {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  padding: 3px;
+  background: linear-gradient(135deg, var(--accent), var(--accent3));
+  box-shadow: 0 0 30px rgba(0,212,255,0.3);
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top;
+  display: block;
+  background: var(--bg3);
+}
+
+.photoFallback {
+  display: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--bg3);
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--accent);
 }
 
 .eyebrow {
