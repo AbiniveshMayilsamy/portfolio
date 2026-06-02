@@ -100,10 +100,26 @@ export default function Hero() {
           <span className={styles.statusText}>Available</span>
         </motion.div>
 
-        {/* Big Name — split letter */}
-        <div className={styles.nameWrap}>
-          <SplitText text="ABINIVESH" className={styles.nameFirst} delay={0.2} />
-          <SplitText text="MAYILSAMY" className={styles.nameLast} delay={0.5} />
+        {/* Big Name — split letter + vertical ticker */}
+        <div className={styles.nameRow}>
+          <div className={styles.nameWrap}>
+            <SplitText text="ABINIVESH" className={styles.nameFirst} delay={0.2} />
+            <SplitText text="MAYILSAMY" className={styles.nameLast} delay={0.5} />
+          </div>
+
+          {/* Vertical scrolling ticker */}
+          <div className={styles.verticalTicker} aria-hidden="true">
+            <div className={styles.tickerTrack}>
+              {[
+                '☁️ Cloud', '🐧 Linux', '⚡ AWS', '🔐 IAM', '🌐 VPC',
+                '📦 S3', '🖥️ EC2', '🔧 CLI', '🚀 DevOps', '🔒 SSH',
+                '☁️ Cloud', '🐧 Linux', '⚡ AWS', '🔐 IAM', '🌐 VPC',
+                '📦 S3', '🖥️ EC2', '🔧 CLI', '🚀 DevOps', '🔒 SSH',
+              ].map((item, i) => (
+                <span key={i} className={styles.tickerItem}>{item}</span>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* Cycling role */}

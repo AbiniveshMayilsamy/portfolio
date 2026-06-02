@@ -103,12 +103,17 @@
 }
 
 /* Big Name */
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
 .nameWrap {
   display: flex;
-  align-items: baseline;
-  gap: 1.2rem;
-  flex-wrap: wrap;
-  margin-bottom: 1.5rem;
+  flex-direction: column;
+  gap: 0.2rem;
   perspective: 800px;
 }
 
@@ -118,6 +123,7 @@
   letter-spacing: -0.04em;
   line-height: 1;
   color: #fff;
+  display: block;
 }
 
 .nameLast {
@@ -130,6 +136,45 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
   filter: drop-shadow(0 0 20px rgba(153,255,0,0.35));
+  display: block;
+}
+
+/* Vertical Ticker */
+.verticalTicker {
+  height: clamp(120px, 18vw, 200px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  flex-shrink: 0;
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+}
+
+.tickerTrack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  animation: tickerUp 12s linear infinite;
+}
+
+.tickerItem {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: rgba(153, 255, 0, 0.05);
+  border: 1px solid rgba(153, 255, 0, 0.15);
+  border-radius: 8px;
+  padding: 0.35rem 0.8rem;
+  white-space: nowrap;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+@keyframes tickerUp {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
 }
 
 /* Cycling Role */
@@ -221,6 +266,7 @@
 @media (max-width: 768px) {
   .hero { padding-top: 7rem; }
   .nameFirst, .nameLast { font-size: clamp(2.2rem, 11vw, 4rem); }
+  .verticalTicker { display: none; }
   .sub { font-size: 1rem; }
   .actions { flex-direction: column; align-items: stretch; gap: 0.75rem; }
   .stats { gap: 1.5rem; }
