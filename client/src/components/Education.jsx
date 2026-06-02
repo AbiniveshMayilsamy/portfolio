@@ -35,6 +35,8 @@ const achievements = [
   { title: 'SQL Intermediate & Advanced', org: 'HackerRank' },
   { title: 'Java Fundamentals Badge', org: 'Oracle' },
   { title: 'Intro to ML, DL & Computer Vision', org: 'IIT Madras (Online)' },
+  { title: 'K! Hacks 3.0', org: 'Participant (Online) — National Level Hackathon' },
+  { title: 'Quantathon 3.0', org: 'Participant (Online) — National Level Competition' },
 ];
 
 export default function Education() {

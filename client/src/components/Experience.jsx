@@ -4,9 +4,20 @@ import styles from './Experience.module.css';
 
 const experiences = [
   {
+    role: 'Summer Research Intern',
+    company: 'Vicharanashala Lab, IIT Ropar',
+    period: 'May 2026 – Present',
+    type: 'Internship',
+    points: [
+      'Currently interning at Vicharanashala Lab, IIT Ropar.',
+      'Working on research-oriented projects under faculty guidance.',
+      'Gaining exposure to advanced computing and research methodologies.'
+    ]
+  },
+  {
     role: 'Boys Class Representative',
     company: 'Sri Eshwar College of Engineering',
-    period: '2025 – Present',
+    period: '2026 – Present',
     type: 'Leadership',
     points: [
       'Elected Class Representative for Section II CSE A.',
@@ -16,7 +27,7 @@ const experiences = [
   },
   {
     role: 'Full Stack Developer Intern',
-    company: 'CODEHUB NEXUS',
+    company: 'AlgoTutor',
     period: '2025',
     type: 'Internship',
     points: [
@@ -61,47 +72,42 @@ export default function Experience() {
         <h2 className="section-title">Where I've <em>contributed.</em></h2>
       </div>
 
-      <div className={styles.timeline}>
+      <div className={styles.stackList}>
         {experiences.map((exp, idx) => (
-          <motion.div
+          <div
             key={exp.role + exp.company}
-            className={styles.timelineItem}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: idx * 0.1 }}
+            className={styles.stackItem}
+            style={{ top: `calc(80px + ${idx * 24}px)`, zIndex: idx + 1 }}
           >
-            {/* Year Column */}
-            <div className={styles.yearCol}>
-              <span className={styles.period}>{exp.period}</span>
-              <span className={styles.typeBadge}>{exp.type}</span>
-            </div>
-
-            {/* Line with Dot */}
-            <div className={styles.lineCol}>
-              <div className={styles.dot} />
-              <div className={styles.line} />
-            </div>
-
-            {/* Content Column */}
-            <div className={styles.contentCol}>
-              <div className={styles.card}>
-                <h3 className={styles.role}>{exp.role}</h3>
-                <div className={styles.company}>
-                  <FiBriefcase className={styles.companyIcon} />
-                  <span>{exp.company}</span>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+            >
+              <div className={styles.cardHeader}>
+                <div className={styles.cardLeft}>
+                  <h3 className={styles.role}>{exp.role}</h3>
+                  <div className={styles.company}>
+                    <FiBriefcase className={styles.companyIcon} />
+                    <span>{exp.company}</span>
+                  </div>
                 </div>
-                <ul className={styles.points}>
-                  {exp.points.map((pt, pIdx) => (
-                    <li key={pIdx} className={styles.point}>
-                      <span className={styles.bulletDot} aria-hidden="true" />
-                      {pt}
-                    </li>
-                  ))}
-                </ul>
+                <div className={styles.cardMeta}>
+                  <span className={styles.period}>{exp.period}</span>
+                  <span className={styles.typeBadge}>{exp.type}</span>
+                </div>
               </div>
-            </div>
-          </motion.div>
+              <ul className={styles.points}>
+                {exp.points.map((pt, pIdx) => (
+                  <li key={pIdx} className={styles.point}>
+                    <span className={styles.bulletDot} aria-hidden="true" />
+                    {pt}
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
         ))}
       </div>
     </section>

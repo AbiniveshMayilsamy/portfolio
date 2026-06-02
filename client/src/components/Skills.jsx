@@ -1,33 +1,33 @@
 import { motion } from 'framer-motion';
-import { FiLayout, FiSliders, FiCpu } from 'react-icons/fi';
+import { FiLayout, FiSliders, FiCloud } from 'react-icons/fi';
 import styles from './Skills.module.css';
 
 const services = [
   {
     num: '01',
-    title: 'Hardware & Embedded Systems',
-    icon: <FiCpu />,
-    desc: 'Building integrated systems that bridge hardware infrastructure and software applications using microcontrollers and robotics.',
+    title: 'Cloud & Infrastructure',
+    icon: <FiCloud />,
+    desc: 'Architecting and deploying scalable cloud-native solutions on AWS. Aspiring Linux System Administrator with a strong focus on server management, cloud security, and DevOps workflows.',
     features: [
-      'ESP32 & NVIDIA Jetson Nano development',
-      'Robot Operating System (ROS 2)',
-      'Hardware-Software integration',
-      'Vision-based AGV systems (Neuro-Nav)'
+      'AWS Cloud services & deployment (CLF-C02 preparing)',
+      'Linux system administration & server management',
+      'Cloud security, IAM & cost optimization',
+      'CI/CD pipelines & DevOps practices'
     ],
-    tech: ['ESP32', 'NVIDIA Jetson Nano', 'ROS 2', 'Python', 'C++']
+    tech: ['AWS', 'Linux', 'EC2', 'S3', 'IAM', 'Docker', 'CI/CD']
   },
   {
     num: '02',
-    title: 'Full Stack & Cloud',
+    title: 'Full Stack Development',
     icon: <FiSliders />,
-    desc: 'Engineering scalable web applications and cloud-native solutions with modern full stack technologies and AWS infrastructure.',
+    desc: 'Engineering scalable web applications with modern full stack technologies, from REST APIs to responsive frontends.',
     features: [
       'MERN Stack web applications',
       'Java Spring Boot backends',
-      'AWS Cloud services & deployment',
-      'Headless CMS integrations (Strapi, WordPress)'
+      'Headless CMS integrations (Strapi, WordPress)',
+      'Authentication, REST APIs & database design'
     ],
-    tech: ['React.js', 'Node.js', 'Express.js', 'Java Spring Boot', 'MongoDB', 'MySQL', 'AWS']
+    tech: ['React.js', 'Node.js', 'Express.js', 'Java Spring Boot', 'MongoDB', 'MySQL']
   },
   {
     num: '03',

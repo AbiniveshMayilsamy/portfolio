@@ -48,10 +48,10 @@ export default function About() {
         >
           <div className={styles.bioCard}>
             <p className={styles.para}>
-              I'm a Computer Science Engineering student with a strong hardware-first background, specializing in bridging the gap between hardware infrastructure and software applications. With expertise in microcontrollers, robotics (ROS 2), and cloud services, I'm passionate about high-performance computing and solving complex problems through practical, hands-on development.
+              I'm a Computer Science Engineering student passionate about cloud infrastructure, Linux systems, and full stack development. I specialize in designing and deploying scalable cloud-native solutions on AWS, with a strong interest in system administration and DevOps practices.
             </p>
             <p className={styles.para}>
-              Admitted to B.E. CSE at Sri Eshwar College of Engineering via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%. Currently preparing for AWS Certified Cloud Practitioner (CLF-C02).
+              Admitted to B.E. CSE at Sri Eshwar College of Engineering via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%. Currently preparing for AWS Certified Cloud Practitioner (CLF-C02) and aspiring to specialize in Linux system administration and cloud infrastructure.
             </p>
             <p className={styles.para}>
               Hackathon highlights: 2nd Prize at Fiestaa'26 (KPR Institute) for Agentic AI Loan Approval System, Top 300 Finalist at FixForward Ideathon 2026, and participant at Bonfiglioli Smart Motion Hackathon 2.0 building the Neuro-Nav AGV.

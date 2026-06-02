@@ -25,7 +25,7 @@ export default function Hero() {
         >
           <span className={styles.eyebrowBar} aria-hidden="true"></span>
           <span className={styles.eyebrowTag}>[01]</span>
-          Full Stack Developer &amp; ML Engineer
+          Cloud Engineer &amp; Full Stack Developer &amp; Linux Admin Aspirant
         </motion.p>
 
         <motion.h1 
@@ -63,7 +63,7 @@ export default function Hero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
-          MERN Stack Developer &amp; Hardware-First Innovator — bridging microcontrollers, ROS 2 robotics, and cloud services to build integrated, high-performance systems.
+          Cloud Engineer &amp; Full Stack Developer — designing scalable AWS infrastructure, Linux systems, and full stack applications to deliver reliable, high-performance solutions.
         </motion.p>
 
         <motion.div 
