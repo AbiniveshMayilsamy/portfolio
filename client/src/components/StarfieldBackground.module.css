@@ -3,73 +3,159 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at 40% 40%, #001a08 0%, #000a04 40%, #000000 100%);
+  background: #0A0A0B;
   overflow: hidden;
 }
 
-.stars1, .stars2, .stars3 {
+/* Animated Orbs */
+.orb1 {
   position: absolute;
-  inset: 0;
-  background-repeat: repeat;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(153, 255, 0, 0.12) 0%, transparent 65%);
+  top: -100px;
+  left: -100px;
+  animation: orbFloat1 20s ease-in-out infinite;
+  filter: blur(40px);
 }
 
-.stars1 {
+.orb2 {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 212, 255, 0.07) 0%, transparent 65%);
+  bottom: 10%;
+  right: -80px;
+  animation: orbFloat2 25s ease-in-out infinite;
+  filter: blur(50px);
+}
+
+.orb3 {
+  position: absolute;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(153, 255, 0, 0.06) 0%, transparent 65%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbFloat3 18s ease-in-out infinite;
+  filter: blur(60px);
+}
+
+.orb4 {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 100, 0, 0.04) 0%, transparent 65%);
+  top: 30%;
+  right: 25%;
+  animation: orbFloat4 22s ease-in-out infinite;
+  filter: blur(45px);
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33%       { transform: translate(80px, 60px) scale(1.1); }
+  66%       { transform: translate(-40px, 120px) scale(0.95); }
+}
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  40%       { transform: translate(-70px, -80px) scale(1.08); }
+  70%       { transform: translate(50px, -30px) scale(0.9); }
+}
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%       { transform: translate(-50%, -50%) scale(1.3); }
+}
+@keyframes orbFloat4 {
+  0%, 100% { transform: translate(0, 0); }
+  50%       { transform: translate(-60px, 80px); }
+}
+
+/* Subtle grid */
+.grid {
+  position: absolute;
+  inset: 0;
   background-image:
-    radial-gradient(1px 1px at 10% 20%, rgba(153,255,0,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 25% 55%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 40% 10%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 55% 70%, rgba(153,255,0,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 70% 35%, rgba(153,255,0,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 80% 80%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 15%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 85%, rgba(153,255,0,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 60% 50%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 35% 30%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 78% 60%, rgba(153,255,0,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 5%  45%, rgba(153,255,0,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 92% 90%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 48% 88%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 22% 5%,  rgba(153,255,0,0.3) 0%, transparent 100%);
+    linear-gradient(rgba(153, 255, 0, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(153, 255, 0, 0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+}
+
+/* Stars */
+.stars1 {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1px 1px at 10% 20%, rgba(153,255,0,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 25% 55%, rgba(153,255,0,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 40% 10%, rgba(153,255,0,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 55% 70%, rgba(153,255,0,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 70% 35%, rgba(153,255,0,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 80% 80%, rgba(153,255,0,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 90% 15%, rgba(153,255,0,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 15% 85%, rgba(153,255,0,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 60% 50%, rgba(153,255,0,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 35% 30%, rgba(153,255,0,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 78% 60%, rgba(153,255,0,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 5%  45%, rgba(153,255,0,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 92% 90%, rgba(153,255,0,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 48% 88%, rgba(153,255,0,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 22% 5%,  rgba(153,255,0,0.2) 0%, transparent 100%);
   animation: twinkle1 4s ease-in-out infinite alternate;
 }
 
 .stars2 {
+  position: absolute;
+  inset: 0;
   background-image:
-    radial-gradient(1px 1px at 18% 38%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 33% 72%, rgba(153,255,0,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 52% 18%, rgba(153,255,0,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 67% 82%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 85% 28%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 7%  62%, rgba(153,255,0,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 44% 95%, rgba(153,255,0,0.6) 0%, transparent 100%),
-    radial-gradient(1px 1px at 96% 48%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 28% 15%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1px 1px at 73% 5%,  rgba(153,255,0,0.3) 0%, transparent 100%),
-    radial-gradient(1px 1px at 58% 42%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1px 1px at 12% 78%, rgba(153,255,0,0.6) 0%, transparent 100%);
+    radial-gradient(1px 1px at 18% 38%, rgba(153,255,0,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 33% 72%, rgba(153,255,0,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 52% 18%, rgba(153,255,0,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 67% 82%, rgba(153,255,0,0.3) 0%, transparent 100%),
+    radial-gradient(1px 1px at 85% 28%, rgba(153,255,0,0.4) 0%, transparent 100%),
+    radial-gradient(1px 1px at 7%  62%, rgba(153,255,0,0.2) 0%, transparent 100%),
+    radial-gradient(1px 1px at 44% 95%, rgba(153,255,0,0.5) 0%, transparent 100%),
+    radial-gradient(1px 1px at 96% 48%, rgba(153,255,0,0.3) 0%, transparent 100%);
   animation: twinkle2 6s ease-in-out infinite alternate;
 }
 
-.stars3 {
-  background-image:
-    radial-gradient(1.5px 1.5px at 30% 25%, rgba(153,255,0,0.7) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 65% 65%, rgba(153,255,0,0.5) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 82% 12%, rgba(153,255,0,0.6) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 45% 55%, rgba(153,255,0,0.4) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 8%  92%, rgba(153,255,0,0.7) 0%, transparent 100%),
-    radial-gradient(1.5px 1.5px at 93% 75%, rgba(153,255,0,0.5) 0%, transparent 100%);
-  animation: twinkle3 5s ease-in-out infinite alternate;
-}
-
 @keyframes twinkle1 {
-  0%   { opacity: 0.6; }
+  0%   { opacity: 0.5; }
   100% { opacity: 1; }
 }
 @keyframes twinkle2 {
   0%   { opacity: 1; }
-  100% { opacity: 0.4; }
+  100% { opacity: 0.3; }
 }
-@keyframes twinkle3 {
-  0%   { opacity: 0.5; }
-  100% { opacity: 0.9; }
+
+/* Floating numbers layer */
+.numbersLayer {
+  position: absolute;
+  inset: 0;
+}
+
+.floatNum {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  color: #99FF00;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+  user-select: none;
+  animation: floatUp linear infinite;
+  white-space: nowrap;
+}
+
+@keyframes floatUp {
+  0%   { transform: translateY(0px) rotate(-5deg);   opacity: var(--op, 0.07); }
+  25%  { transform: translateY(-60px) rotate(3deg);  }
+  50%  { transform: translateY(-120px) rotate(-2deg); opacity: var(--op, 0.07); }
+  75%  { transform: translateY(-60px) rotate(4deg);  }
+  100% { transform: translateY(0px) rotate(-5deg);   opacity: var(--op, 0.07); }
 }
