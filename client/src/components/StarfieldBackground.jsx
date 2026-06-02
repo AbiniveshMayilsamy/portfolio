@@ -1,109 +1,59 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function StarfieldBackground() {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const canvasRef = useRef();
 
   useEffect(() => {
-    const handleMouseMove = (e) => {
-      // Get percentage positions
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      setMousePos({ x, y });
-    };
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    let animId;
 
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Generate stars
+    const stars = Array.from({ length: 180 }, () => ({
+      x: Math.random() * window.innerWidth,
+      y: Math.random() * window.innerHeight,
+      r: Math.random() * 1.2 + 0.2,
+      o: Math.random() * 0.6 + 0.1,
+      speed: Math.random() * 0.15 + 0.02,
+    }));
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      stars.forEach(s => {
+        s.o += s.speed * 0.02;
+        if (s.o > 0.8) { s.speed = -Math.abs(s.speed); }
+        if (s.o < 0.05) { s.speed = Math.abs(s.speed); }
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(0, 212, 255, ${s.o})`;
+        ctx.fill();
+      });
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      window.removeEventListener('resize', resize);
+      cancelAnimationFrame(animId);
+    };
   }, []);
 
   return (
-    <div
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 0,
-        pointerEvents: 'none',
-        backgroundColor: '#0A0A0B',
-        overflow: 'hidden',
-      }}
-    >
-      {/* Structural grid line pattern */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: `
-            linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px)
-          `,
-          backgroundSize: '100px 100px',
-          opacity: 0.8,
-        }}
-      />
-
-      {/* Static radial background gradient glows */}
-      <div
-        style={{
-          position: 'absolute',
-          top: '-10%',
-          left: '20%',
-          width: '60vw',
-          height: '60vw',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(153, 255, 0, 0.06) 0%, transparent 70%)',
-          filter: 'blur(60px)',
-          animation: 'drift-slow 25s infinite alternate ease-in-out',
-        }}
-      />
-
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '-20%',
-          right: '10%',
-          width: '50vw',
-          height: '50vw',
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(0, 212, 255, 0.04) 0%, transparent 75%)',
-          filter: 'blur(80px)',
-          animation: 'drift-slow-rev 30s infinite alternate ease-in-out',
-        }}
-      />
-
-      {/* Interactive mouse spotlight glow */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          background: `radial-gradient(circle 350px at ${mousePos.x}% ${mousePos.y}%, rgba(153, 255, 0, 0.045) 0%, transparent 80%)`,
-          transition: 'background 0.1s ease',
-        }}
-      />
-
-      {/* Animation styles */}
-      <style>{`
-        @keyframes drift-slow {
-          0% {
-            transform: translate(0px, 0px) scale(1);
-          }
-          50% {
-            transform: translate(40px, -50px) scale(1.1);
-          }
-          100% {
-            transform: translate(-20px, 20px) scale(0.9);
-          }
-        }
-        @keyframes drift-slow-rev {
-          0% {
-            transform: translate(0px, 0px) scale(0.9);
-          }
-          50% {
-            transform: translate(-30px, 40px) scale(1.05);
-          }
-          100% {
-            transform: translate(20px, -20px) scale(1);
-          }
-        }
-      `}</style>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none' }}>
+      {/* Deep gradient bg */}
+      <div style={{
+        position: 'absolute', inset: 0,
+        background: 'radial-gradient(ellipse at 40% 40%, #001428 0%, #000a18 40%, #000000 100%)',
+      }} />
+      {/* Canvas stars */}
+      <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, opacity: 0.9 }} />
     </div>
   );
 }

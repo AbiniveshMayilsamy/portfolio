@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiZap, FiAward, FiGithub, FiArrowRight } from 'react-icons/fi';
+import { FiZap, FiAward, FiGithub, FiArrowRight, FiDownload } from 'react-icons/fi';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -88,6 +88,15 @@ export default function Hero() {
             <span className="btn-dot" aria-hidden="true"></span>
             <span>Selected Work</span>
           </button>
+
+          <a
+            href="https://drive.google.com/uc?export=download&id=1JJvqBbdG4CX6PbnaDNU9gX6jGsRNRqcd"
+            download
+            className="btn btn-secondary"
+          >
+            <FiDownload />
+            <span>Download CV</span>
+          </a>
         </motion.div>
 
         {/* Metrics Row */}
