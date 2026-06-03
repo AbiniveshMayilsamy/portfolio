@@ -31,7 +31,6 @@ export default function AdminLogin({ onLogin }) {
           placeholder="Enter admin password"
           value={password}
           onChange={e => setPassword(e.target.value)}
-          required
         />
         {error && <p className={styles.error}>{error}</p>}
         <button type="submit" className="btn btn-primary" disabled={loading}>

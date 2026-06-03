@@ -121,7 +121,7 @@ const auth = (req, res, next) => {
 // ── Admin login ──────────────────────────────────────────────
 app.post('/api/admin/login', strictLimiter, (req, res) => {
   const { password } = req.body;
-  if (password !== (process.env.ADMIN_PASS || 'admin123'))
+  if (password !== (process.env.ADMIN_PASS || ''))
     return res.status(401).json({ error: 'Wrong password' });
   const token = jwt.sign({ admin: true }, process.env.JWT_SECRET || 'admin_secret', { expiresIn: '7d' });
   res.json({ token });
