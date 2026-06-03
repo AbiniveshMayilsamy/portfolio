@@ -385,7 +385,10 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 // Serve React frontend in production
 const clientBuild = path.join(__dirname, '../client/dist');
 app.use(express.static(clientBuild));
-app.get('/{*path}', (req, res) => {
+app.get('*', (req, res, next) => {
+  if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
+    return next();
+  }
   res.sendFile(path.join(clientBuild, 'index.html'));
 });
 
