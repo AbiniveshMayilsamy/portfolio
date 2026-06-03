@@ -29,7 +29,7 @@ export default function CodingStats({ isOpen, onClose }) {
       try {
         setLoading(true);
         setError(null);
-        const res = await axios.get(`${API_BASE}/api/coding-stats`);
+        const res = await axios.get(`${API_BASE}/api/coding-stats`, { timeout: 15000 });
         setData(res.data);
       } catch (err) {
         console.error('Failed to fetch coding stats:', err);
