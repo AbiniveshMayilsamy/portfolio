@@ -15,14 +15,14 @@ const education = [
     institution: 'Nachimuthu Polytechnic College',
     period: '2022 – 2025',
     grade: '92.5%',
-    details: 'Completed Diploma with a 92.5% aggregate. Built a strong foundation in programming, networking, web development, and computer fundamentals.'
+    details: 'Completed Diploma with a 92.5% aggregate (First Class with Distinction). Built a strong foundation in programming, networking, web development, and computer fundamentals.'
   },
   {
     degree: 'Secondary School Certificate (SSLC)',
     institution: 'R.G. Matric Higher Secondary School',
     period: '2021 – 2022',
     grade: '79.8%',
-    details: 'Completed 10th grade with 79.8% distinction at R.G. Matric Higher Secondary School.'
+    details: 'Completed 10th grade with 79.8% at R.G. Matric Higher Secondary School.'
   }
 ];
 
