@@ -407,6 +407,7 @@ sequelize.authenticate()
     app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
   })
   .catch(err => {
-    console.error('Database connection failed:', err);
+    const config = sequelize.config || {};
+    console.error(`Database connection failed to host: ${config.host}, database: ${config.database}, port: ${config.port}. Error:`, err);
     process.exit(1);
   });
