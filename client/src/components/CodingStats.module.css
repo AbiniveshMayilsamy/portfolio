@@ -1,0 +1,558 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(10px);
+  padding: 1rem;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  max-height: 90vh;
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  color: #f3f4f6;
+}
+
+/* Theme support - Light mode override */
+:global(.light) .modal {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1f2937;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+:global(.light) .overlay {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.radialGlow1 {
+  position: absolute;
+  top: -10%;
+  right: -5%;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.radialGlow2 {
+  position: absolute;
+  bottom: -10%;
+  left: -5%;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #9ca3af;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 10;
+}
+
+.closeBtn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  transform: rotate(90deg);
+}
+
+:global(.light) .closeBtn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #4b5563;
+}
+
+.header {
+  padding: 2.5rem 2.5rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 2;
+}
+
+:global(.light) .header {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #a78bfa;
+  margin-bottom: 0.75rem;
+}
+
+.eyebrowBar {
+  width: 16px;
+  height: 2px;
+  background: #a78bfa;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 800;
+  line-height: 1.2;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.title em {
+  font-style: normal;
+  background: linear-gradient(135deg, #a78bfa 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.description {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  margin: 0;
+}
+
+:global(.light) .description {
+  color: #4b5563;
+}
+
+.contentScroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 2.5rem 2.5rem;
+  z-index: 2;
+}
+
+/* Custom Scrollbar */
+.contentScroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.contentScroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.contentScroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+}
+
+:global(.light) .contentScroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  gap: 1.5rem;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 3px solid rgba(139, 92, 246, 0.1);
+  border-top-color: #a78bfa;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6rem 2rem;
+  text-align: center;
+}
+
+.errorIcon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.errorState h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.errorState p {
+  color: #ef4444;
+  margin-bottom: 2rem;
+}
+
+.aggregatedRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.aggregateCard {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+.aggregateCard:hover {
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateY(-2px);
+}
+
+:global(.light) .aggregateCard {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .aggregateCard:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.aggIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(167, 139, 250, 0.1);
+  color: #a78bfa;
+  font-size: 1.5rem;
+}
+
+.aggInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.aggNum {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+:global(.light) .aggNum {
+  color: #111827;
+}
+
+.aggLabel {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+}
+
+:global(.light) .aggLabel {
+  color: #4b5563;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 24px;
+  padding: 1.75rem;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+:global(.light) .card {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+:global(.light) .card:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.platformMeta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.platformIconWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  font-size: 1.5rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+:global(.light) .platformIconWrap {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.platformName {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin: 0;
+}
+
+.platformUsername {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+:global(.light) .platformUsername {
+  color: #6b7280;
+}
+
+.extLink {
+  color: #9ca3af;
+  font-size: 1.1rem;
+  display: flex;
+  padding: 0.5rem;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.extLink:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+:global(.light) .extLink:hover {
+  color: #000000;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.cardStats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.statBox {
+  display: flex;
+  flex-direction: column;
+  background: rgba(255, 255, 255, 0.015);
+  border: 1px solid rgba(255, 255, 255, 0.03);
+  padding: 0.85rem;
+  border-radius: 14px;
+}
+
+:global(.light) .statBox {
+  background: rgba(0, 0, 0, 0.01);
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.statBoxLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  margin-bottom: 0.25rem;
+}
+
+:global(.light) .statBoxLabel {
+  color: #6b7280;
+}
+
+.statBoxVal {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+:global(.light) .statBoxVal {
+  color: #1f2937;
+}
+
+/* Progress bar for LeetCode difficulty breakdown */
+.progressContainer {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+:global(.light) .progressContainer {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.progressHeader {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9ca3af;
+  display: block;
+  margin-bottom: 0.75rem;
+}
+
+:global(.light) .progressHeader {
+  color: #4b5563;
+}
+
+.progressItem {
+  margin-bottom: 0.75rem;
+}
+
+.progressItem:last-child {
+  margin-bottom: 0;
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.progressBarBg {
+  height: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+:global(.light) .progressBarBg {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.progressBarFill {
+  height: 100%;
+  border-radius: 3px;
+}
+
+/* Custom list of SkillRack certificates */
+.certificatesList {
+  margin-top: auto;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+:global(.light) .certificatesList {
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.certTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #9ca3af;
+}
+
+:global(.light) .certTitle {
+  color: #4b5563;
+}
+
+.certLink {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #38bdf8;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.certLink:hover {
+  text-decoration: underline;
+  opacity: 0.9;
+}
+
+/* Card Specific Colors */
+.leetcodeCard:hover { border-color: rgba(249, 115, 22, 0.3); }
+.leetcodeIcon { color: #f97316; }
+
+.githubCard:hover { border-color: rgba(139, 92, 246, 0.3); }
+.githubIcon { color: #a78bfa; }
+
+.skillrackCard:hover { border-color: rgba(6, 182, 212, 0.3); }
+.skillrackIcon { color: #06b6d4; }
+
+.codeforcesCard:hover { border-color: rgba(59, 130, 246, 0.3); }
+.codeforcesIcon { color: #3b82f6; }
+
+.codechefCard:hover { border-color: rgba(244, 63, 94, 0.3); }
+.codechefIcon { color: #f43f5e; }
+
+.hackerrankCard:hover { border-color: rgba(16, 185, 129, 0.3); }
+.hackerrankIcon { color: #10b981; }
+
+@media (max-width: 640px) {
+  .modal {
+    max-height: 95vh;
+    border-radius: 20px;
+  }
+  .header {
+    padding: 1.5rem 1.5rem 1rem;
+  }
+  .title {
+    font-size: 1.75rem;
+  }
+  .contentScroll {
+    padding: 1rem 1.5rem 1.5rem;
+  }
+  .aggregatedRow {
+    grid-template-columns: 1fr;
+  }
+}

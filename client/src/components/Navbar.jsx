@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './Navbar.module.css';
+import CodingStats from './CodingStats';
 
 const menuLinks = [
   { label: 'About', index: '01', id: 'about' },
@@ -10,12 +11,14 @@ const menuLinks = [
   { label: 'Education', index: '05', id: 'education' },
   { label: 'Gallery', index: '06', id: 'gallery' },
   { label: 'FAQs', index: '07', id: 'faq' },
-  { label: 'Contact', index: '08', id: 'contact' }
+  { label: 'Contact', index: '08', id: 'contact' },
+  { label: 'Coding Stats', index: '09', id: 'coding-stats', isModal: true }
 ];
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [showStats, setShowStats] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -33,6 +36,15 @@ export default function Navbar() {
     }
   };
 
+  const handleLinkClick = (link) => {
+    setMenuOpen(false);
+    if (link.isModal) {
+      setShowStats(true);
+    } else {
+      scrollTo(link.id);
+    }
+  };
+
   return (
     <>
       <header className={`${styles.nav} ${scrolled ? styles.scrolled : ''}`}>
@@ -44,6 +56,14 @@ export default function Navbar() {
 
           {/* Actions on right */}
           <div className={styles.actions}>
+            <button 
+              type="button" 
+              className="btn btn-secondary shiny-cta--compact" 
+              onClick={() => setShowStats(true)}
+              style={{ marginRight: '0.75rem', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+            >
+              <span>Coding Stats &rarr;</span>
+            </button>
             <button 
               type="button" 
               className="btn shiny-cta shiny-cta--compact" 
@@ -98,7 +118,7 @@ export default function Navbar() {
                       <button
                         type="button"
                         className={styles.overlayLink}
-                        onClick={() => scrollTo(link.id)}
+                        onClick={() => handleLinkClick(link)}
                       >
                         <span className={styles.overlayIndex}>[{link.index}]</span>
                         <span className={styles.overlayLabel}>{link.label}</span>
@@ -121,6 +141,7 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+      <CodingStats isOpen={showStats} onClose={() => setShowStats(false)} />
     </>
   );
 }

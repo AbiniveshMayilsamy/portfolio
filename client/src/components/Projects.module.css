@@ -137,6 +137,8 @@
 /* Floating Cursor Preview Container */
 .cursorPreview {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 280px;
   height: 190px;
   background-color: #121214;
@@ -144,10 +146,11 @@
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5), 0 0 15px rgba(153, 255, 0, 0.15);
   border-radius: 12px;
   pointer-events: none;
-  z-index: 100;
+  z-index: 9999;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  will-change: transform;
 }
 
 /* Individual Preview Cards & SVGs/Animations */
@@ -363,6 +366,13 @@
   height: 4px;
   background-color: var(--accent);
   border-radius: 1px;
+}
+
+/* Inline preview on hover */
+.inlinePreview {
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
 }
 
 /* Mobile Preview Block Inline styling */
