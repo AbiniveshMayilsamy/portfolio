@@ -96,7 +96,7 @@ export default function Gallery() {
                 onClick={() => setActivePhoto(item)}
               >
                 <div className={styles.imgWrap}>
-                  <img src={item.filename} alt={item.title} className={styles.img} />
+                  <img src={item.filename.startsWith('http') ? item.filename : `${API_BASE}${item.filename}`} alt={item.title} className={styles.img} />
                   <div className={styles.overlay}>
                     <span className={styles.catBadge}>
                       {item.category.toUpperCase()}
@@ -135,7 +135,7 @@ export default function Gallery() {
                 &times;
               </button>
               <img
-                src={activePhoto.filename}
+                src={activePhoto.filename.startsWith('http') ? activePhoto.filename : `${API_BASE}${activePhoto.filename}`}
                 alt={activePhoto.title}
                 className={styles.lightboxImg}
               />

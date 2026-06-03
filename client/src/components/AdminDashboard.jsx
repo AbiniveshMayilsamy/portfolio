@@ -3,6 +3,8 @@ import api from '../api';
 import { FiUpload, FiTrash2, FiLogOut, FiFile, FiMail, FiImage, FiPlus, FiX } from 'react-icons/fi';
 import styles from './Admin.module.css';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 const CATEGORIES = [
   { value: 'event', label: '🎪 Event' },
   { value: 'prize', label: '🏆 Prize Won' },
@@ -262,7 +264,7 @@ export default function AdminDashboard({ token, onLogout }) {
               {filteredGallery.map(item => (
                 <div key={item._id} className={styles.galleryCard}>
                   <div className={styles.galleryImgWrap}>
-                    <img src={item.filename} alt={item.title} className={styles.galleryImg} />
+                    <img src={item.filename.startsWith('http') ? item.filename : `${API_BASE}${item.filename}`} alt={item.title} className={styles.galleryImg} />
                     <span className={styles.galleryCat}>
                       {item.category === 'event' ? '🎪' : item.category === 'prize' ? '🏆' : '📸'}
                     </span>
@@ -309,7 +311,7 @@ export default function AdminDashboard({ token, onLogout }) {
             {files.map(f => (
               <div key={f._id} className={styles.fileItem}>
                 <div className={styles.fileInfo}>
-                  <a href={`/uploads/${f.filename}`} target="_blank" rel="noreferrer" className={styles.fileName}>
+                  <a href={f.filename.startsWith('http') ? f.filename : `${API_BASE}/uploads/${f.filename}`} target="_blank" rel="noreferrer" className={styles.fileName}>
                     {f.originalName}
                   </a>
                   {f.description && <p className={styles.fileDesc}>{f.description}</p>}
