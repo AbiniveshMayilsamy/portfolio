@@ -332,7 +332,7 @@ app.get('/api/coding-stats', async (req, res) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         rollNo: '24CS302',
-        password: process.env.ALGOLOG_PASSWORD || '24CS302'
+        password: process.env.ALGOLOG_PASSWORD || 'sece@123'
       })
     });
 
@@ -366,7 +366,7 @@ app.get('/api/coding-stats', async (req, res) => {
     }
 
     // Update cache
-    statsCache.data = profileData.data;
+    statsCache.data = profileData.data.student;
     statsCache.timestamp = now;
 
     res.json(statsCache.data);
