@@ -223,6 +223,40 @@
   color: var(--accent);
 }
 
+/* Custom Navbar buttons and responsiveness */
+.navBtn {
+  padding: 0.5rem 1rem !important;
+  font-size: 0.85rem !important;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-right: 0.75rem;
+}
+
+.downloadBtn {
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+}
+
+.downloadBtn:hover {
+  background-color: rgba(153, 255, 0, 0.08) !important;
+  border-color: var(--accent) !important;
+  color: var(--accent) !important;
+}
+
+@media (max-width: 1024px) {
+  /* On tablet screens, hide the text of the download button and keep just the icon */
+  .downloadBtn span {
+    display: none;
+  }
+  .downloadBtn {
+    padding: 0.5rem 0.75rem !important;
+    margin-right: 0.5rem;
+  }
+}
+
 @media (max-width: 768px) {
   .overlay {
     padding: 6rem 2rem 2rem;
@@ -233,6 +267,11 @@
   .overlayIndex {
     width: 45px;
     font-size: 0.75rem;
+  }
+  /* On mobile screens, hide the desktop Download CV and Coding Stats buttons */
+  .downloadBtn,
+  .statsBtn {
+    display: none !important;
   }
 }
 

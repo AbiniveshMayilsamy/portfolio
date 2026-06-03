@@ -174,7 +174,7 @@ export default function Hero() {
             <button type="button" className="btn btn-secondary" onClick={() => setShowStats(true)}>
               <FiCode /><span>Read My Coding Stuff</span>
             </button>
-            <a href="https://drive.google.com/uc?export=download&id=1JJvqBbdG4CX6PbnaDNU9gX6jGsRNRqcd" download className="btn btn-secondary">
+            <a href="/Abinivesh_M_Resume.pdf" download="Abinivesh_M_Resume.pdf" className="btn btn-secondary">
               <FiDownload /><span>Download CV</span>
             </a>
           </motion.div>
