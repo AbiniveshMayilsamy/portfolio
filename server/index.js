@@ -72,36 +72,82 @@ const filesDir = path.join(uploadsBaseDir, 'files');
 if (!fs.existsSync(galleryDir)) fs.mkdirSync(galleryDir, { recursive: true });
 if (!fs.existsSync(filesDir)) fs.mkdirSync(filesDir, { recursive: true });
 
-// Multer Local Disk Storage Configuration
-const imageStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, galleryDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
+// ── Cloudinary / Local Disk Multer Configuration ────────────────
+const useCloudinary = !!(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
 
-const fileStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, filesDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, uniqueSuffix + path.extname(file.originalname));
-  }
-});
+let uploadImage;
+let uploadFile;
 
-const uploadImage = multer({ 
-  storage: imageStorage,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
-});
+if (useCloudinary) {
+  console.log('[CONFIG] Cloudinary configuration detected. Uploads will be stored in Cloudinary.');
+  const cloudinary = require('cloudinary').v2;
+  const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-const uploadFile = multer({ 
-  storage: fileStorage,
-  limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit
-});
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+
+  const galleryStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'portfolio/gallery',
+      allowed_formats: ['jpg', 'png', 'jpeg', 'webp'],
+      resource_type: 'image'
+    }
+  });
+
+  const filesStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+      folder: 'portfolio/files',
+      resource_type: 'auto'
+    }
+  });
+
+  uploadImage = multer({ 
+    storage: galleryStorage,
+    limits: { fileSize: 10 * 1024 * 1024 }
+  });
+
+  uploadFile = multer({ 
+    storage: filesStorage,
+    limits: { fileSize: 20 * 1024 * 1024 }
+  });
+} else {
+  console.log('[CONFIG] No Cloudinary configuration detected. Falling back to local disk uploads.');
+  // Multer Local Disk Storage Configuration
+  const imageStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, galleryDir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+  });
+
+  const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, filesDir);
+    },
+    filename: (req, file, cb) => {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+  });
+
+  uploadImage = multer({ 
+    storage: imageStorage,
+    limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+  });
+
+  uploadFile = multer({ 
+    storage: fileStorage,
+    limits: { fileSize: 20 * 1024 * 1024 } // 20MB limit
+  });
+}
 
 // Serve Local Uploads Statically
 app.use('/uploads', express.static(uploadsBaseDir));
@@ -127,14 +173,14 @@ app.post('/api/admin/gallery', auth, uploadImage.single('image'), async (req, re
     const { title, description, category } = req.body;
     if (!req.file) return res.status(400).json({ error: 'Image required' });
     
-    // Store relative path e.g. /uploads/gallery/unique-filename.jpg
-    const relativePath = `/uploads/gallery/${req.file.filename}`;
+    // Store path (full URL if Cloudinary, relative path if local)
+    const filePath = useCloudinary ? req.file.path : `/uploads/gallery/${req.file.filename}`;
     
     const doc = await Gallery.create({
       title: title || req.file.originalname,
       description: description || '',
       category: category || 'photo',
-      filename: relativePath,
+      filename: filePath,
       originalName: req.file.originalname
     });
     res.json({ success: true, item: doc });
@@ -172,13 +218,27 @@ app.delete('/api/admin/gallery/:id', auth, async (req, res) => {
     const doc = await Gallery.findByPk(req.params.id);
     if (!doc) return res.status(404).json({ error: 'Not found' });
     
-    // Delete physical file from disk
-    const relativePath = doc.filename.replace(/^\//, ''); // remove leading slash
-    const filePath = path.join(__dirname, relativePath);
-    
-    fs.unlink(filePath, (err) => {
-      if (err) console.error('Failed to delete file from disk:', err);
-    });
+    // Delete file
+    if (useCloudinary && doc.filename.startsWith('http')) {
+      try {
+        const cloudinary = require('cloudinary').v2;
+        const urlParts = doc.filename.split('/');
+        const folderIndex = urlParts.indexOf('portfolio');
+        if (folderIndex !== -1) {
+          const publicIdWithExtension = urlParts.slice(folderIndex).join('/');
+          const publicId = publicIdWithExtension.replace(/\.[^/.]+$/, ""); // remove extension
+          await cloudinary.uploader.destroy(publicId);
+        }
+      } catch (cErr) {
+        console.error('Failed to delete from Cloudinary:', cErr);
+      }
+    } else if (!doc.filename.startsWith('http')) {
+      const relativePath = doc.filename.replace(/^\//, ''); // remove leading slash
+      const filePath = path.join(__dirname, relativePath);
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Failed to delete file from disk:', err);
+      });
+    }
 
     await doc.destroy();
     res.json({ success: true });
@@ -193,9 +253,8 @@ app.post('/api/admin/upload', auth, uploadFile.single('file'), async (req, res) 
   try {
     if (!req.file) return res.status(400).json({ error: 'File required' });
     
-    // Storing relative path from uploads folder (e.g. files/filename)
-    // for direct resolution in href={`/uploads/${f.filename}`}
-    const dbFilename = `files/${req.file.filename}`;
+    // Storing path (full URL if Cloudinary, relative path if local)
+    const dbFilename = useCloudinary ? req.file.path : `files/${req.file.filename}`;
     
     const doc = await Upload.create({
       filename: dbFilename,
@@ -234,12 +293,25 @@ app.delete('/api/admin/uploads/:id', auth, async (req, res) => {
     const doc = await Upload.findByPk(req.params.id);
     if (!doc) return res.status(404).json({ error: 'Not found' });
     
-    // Delete physical file from disk
-    const filePath = path.join(__dirname, 'uploads', doc.filename);
-    
-    fs.unlink(filePath, (err) => {
-      if (err) console.error('Failed to delete file from disk:', err);
-    });
+    // Delete file
+    if (useCloudinary && doc.filename.startsWith('http')) {
+      try {
+        const cloudinary = require('cloudinary').v2;
+        const urlParts = doc.filename.split('/');
+        const folderIndex = urlParts.indexOf('portfolio');
+        if (folderIndex !== -1) {
+          const publicId = urlParts.slice(folderIndex).join('/');
+          await cloudinary.uploader.destroy(publicId, { resource_type: 'raw' });
+        }
+      } catch (cErr) {
+        console.error('Failed to delete from Cloudinary:', cErr);
+      }
+    } else if (!doc.filename.startsWith('http')) {
+      const filePath = path.join(__dirname, 'uploads', doc.filename);
+      fs.unlink(filePath, (err) => {
+        if (err) console.error('Failed to delete file from disk:', err);
+      });
+    }
 
     await doc.destroy();
     res.json({ success: true });
