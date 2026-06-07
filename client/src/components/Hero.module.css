@@ -346,8 +346,15 @@
 
 @media (max-width: 1024px) {
   .heroLayout { grid-template-columns: 1fr; }
-  .cardCol { display: none; }
+  .cloudCard { display: none; }
   .nameFirst, .nameLast { font-size: clamp(2.5rem, 8vw, 5rem); }
+  .cardCol {
+    width: 100%;
+    justify-content: center;
+  }
+  .badgeCard {
+    width: clamp(180px, 60vw, 260px);
+  }
 }
 
 @media (max-width: 768px) {
