@@ -28,7 +28,7 @@ const education = [
 
 const achievements = [
   { title: 'NPTEL Design Thinking - A Primer', org: 'NPTEL — Score: 65, Elite Status' },
-  { title: 'AWS Cloud Practitioner (CLF-C02)', org: 'Preparing — Amazon Web Services' },
+  { title: 'AWS Certified Cloud Practitioner (CLF-C02)', org: 'Certified — Amazon Web Services' },
   { title: '2nd Prize — Agentic AI Loan System', org: 'Fiestaa\'26, KPR Institute of Engineering' },
   { title: 'Top 300 Finalist', org: 'FixForward Ideathon 2026' },
   { title: 'Bonfiglioli Smart Motion Hackathon 2.0', org: '48hr Hackathon — Chennai Institute of Technology' },
