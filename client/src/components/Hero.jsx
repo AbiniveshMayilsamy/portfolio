@@ -44,6 +44,46 @@ function CountUp({ target, duration = 1500, suffix = '' }) {
   return <>{count}{suffix}</>;
 }
 
+function BadgeCard() {
+  const cardRef = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 20 });
+  const springY = useSpring(y, { stiffness: 150, damping: 20 });
+  const rotateX = useTransform(springY, [-0.5, 0.5], [12, -12]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], [-12, 12]);
+
+  const handleMouseMove = (e) => {
+    const rect = cardRef.current.getBoundingClientRect();
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+  const handleMouseLeave = () => { x.set(0); y.set(0); };
+
+  return (
+    <motion.div
+      ref={cardRef}
+      className={styles.badgeCard}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      style={{ rotateX, rotateY, transformStyle: 'preserve-3d', transformPerspective: 800 }}
+    >
+      <motion.img
+        src="/badge1.png"
+        alt="AWS Certified Cloud Practitioner"
+        className={styles.badgeImg}
+        animate={{ rotate: [0, 8, -8, 8, 0] }}
+        transition={{ duration: 1.5, delay: 1.2, ease: 'easeInOut' }}
+        style={{ transform: 'translateZ(20px)' }}
+      />
+      <span className={styles.badgeLabel} style={{ transform: 'translateZ(10px)' }}>AWS Certified Cloud Practitioner</span>
+    </motion.div>
+  );
+}
+
 function CloudCard() {
   const cardRef = useRef(null);
   const x = useMotionValue(0);
@@ -188,8 +228,9 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* RIGHT — 3D tilt cloud card */}
+        {/* RIGHT — badge + 3D tilt cloud card */}
         <div className={styles.cardCol}>
+          <BadgeCard />
           <CloudCard />
         </div>
       </div>

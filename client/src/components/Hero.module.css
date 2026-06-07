@@ -68,9 +68,43 @@
 /* RIGHT card column */
 .cardCol {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  gap: 1.25rem;
+}
+
+/* AWS Badge Card */
+.badgeCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.04) 0%, rgba(153,255,0,0.04) 100%);
+  border: 1px solid rgba(153,255,0,0.18);
+  border-radius: 18px;
+  padding: 1rem 1.5rem;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 30px rgba(153,255,0,0.06), 0 10px 40px rgba(0,0,0,0.3);
+  width: clamp(200px, 20vw, 280px);
+}
+
+.badgeImg {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+.badgeLabel {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--accent);
+  text-align: center;
+  line-height: 1.4;
 }
 
 /* 3D Tilt Cloud Card */
