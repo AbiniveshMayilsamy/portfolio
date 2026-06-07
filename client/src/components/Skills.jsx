@@ -9,7 +9,8 @@ const services = [
     icon: <FiCloud />,
     desc: 'Architecting and deploying scalable cloud-native solutions on AWS. Aspiring Linux System Administrator with a strong focus on server management, cloud security, and DevOps workflows.',
     features: [
-      'AWS Cloud services & deployment (CLF-C02 preparing)',
+      'AWS Cloud services & deployment (AWS Certified Cloud Practitioner)',
+      'Preparing for SAA-C03 — AWS Certified Solutions Architect',
       'Linux system administration & server management',
       'Cloud security, IAM & cost optimization',
       'CI/CD pipelines & DevOps practices'
