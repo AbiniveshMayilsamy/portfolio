@@ -112,25 +112,25 @@ async function fetchGitHub(username) {
     ? { Authorization: `Bearer ${process.env.GITHUB_TOKEN}` }
     : {};
 
-  const [userRes, reposRes] = await Promise.all([
-    fetchJSON(`https://api.github.com/users/${username}`, { headers }),
-    fetchJSON(`https://api.github.com/users/${username}/repos?per_page=100&type=owner`, { headers }),
-  ]);
+  // Paginate repos to get accurate star count
+  let allRepos = [], page = 1;
+  while (true) {
+    const r = await fetchJSON(`https://api.github.com/users/${username}/repos?per_page=100&type=owner&page=${page}`, { headers });
+    const batch = Array.isArray(r.body) ? r.body : [];
+    allRepos = allRepos.concat(batch);
+    if (batch.length < 100) break;
+    page++;
+  }
 
+  const userRes = await fetchJSON(`https://api.github.com/users/${username}`, { headers });
   if (userRes.status !== 200) throw new Error('GitHub user not found');
 
-  const repos = Array.isArray(reposRes.body) ? reposRes.body : [];
-  const stars = repos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
-  const totalRepos = userRes.body.public_repos || repos.length;
+  const stars = allRepos.reduce((sum, r) => sum + (r.stargazers_count || 0), 0);
+  const totalRepos = userRes.body.public_repos || allRepos.length;
 
-  // Commit count via contributor stats on each repo (expensive) — use events as proxy
   const eventsRes = await fetchJSON(`https://api.github.com/users/${username}/events?per_page=100`, { headers });
   const events = Array.isArray(eventsRes.body) ? eventsRes.body : [];
-  const recentCommits = events
-    .filter(e => e.type === 'PushEvent')
-    .reduce((sum, e) => sum + (e.payload?.commits?.length || 0), 0);
 
-  // Streak from push events
   const pushDays = new Set(
     events.filter(e => e.type === 'PushEvent').map(e => e.created_at?.slice(0, 10))
   );
@@ -144,20 +144,13 @@ async function fetchGitHub(username) {
     else streak = 0;
   }
 
-  // Total commits: use search API
   const searchRes = await fetchJSON(
     `https://api.github.com/search/commits?q=author:${username}&per_page=1`,
     { headers: { ...headers, Accept: 'application/vnd.github.cloak-preview' } }
   );
-  const totalCommits = searchRes.body?.total_count || recentCommits;
+  const totalCommits = searchRes.body?.total_count || 0;
 
-  return {
-    username,
-    totalCommits,
-    totalRepos,
-    stars,
-    longestStreak,
-  };
+  return { username, totalCommits, totalRepos, stars, longestStreak };
 }
 
 // ── Codeforces (public REST API) ───────────────────────────────
@@ -190,19 +183,20 @@ async function fetchCodeforces(username) {
 async function fetchCodeChef(username) {
   const html = await fetchHTML(`https://www.codechef.com/users/${username}`);
 
-  const ratingMatch = html.match(/"currentRating"\s*:\s*(\d+)/);
-  const starsMatch = html.match(/(\d+)\s*★/) || html.match(/rating-star[^>]*>([^<]+)</);
-  const rankMatch = html.match(/"globalRank"\s*:\s*(\d+)/);
-  const solvedMatch = html.match(/(\d+)\s*(?:Fully\s*Solved|fully solved)/i);
+  // Rating: from JS var current_user_rating or last entry in all_rating array
+  const ratingJsMatch = html.match(/"rating"\s*:\s*"(\d+)"[^}]*}\s*\]\s*;/);
+  const ratingVarMatch = html.match(/current_user_rating\s*=\s*(\d+)/);
+  const rating = ratingVarMatch ? parseInt(ratingVarMatch[1])
+    : ratingJsMatch ? parseInt(ratingJsMatch[1]) : 0;
 
-  // Fallback: look for rating in the page differently
-  const ratingAlt = html.match(/class="rating"[^>]*>\s*(\d+)/);
-
-  const rating = ratingMatch ? parseInt(ratingMatch[1]) : (ratingAlt ? parseInt(ratingAlt[1]) : 0);
+  // Global rank: <strong class='global-rank'>18364</strong>
+  const rankMatch = html.match(/<strong class='global-rank'>(\d+)<\/strong>/);
   const globalRank = rankMatch ? parseInt(rankMatch[1]) : 0;
+
+  // Problems solved: Total Problems Solved: 21
+  const solvedMatch = html.match(/Total Problems Solved:\s*(\d+)/);
   const fullySolved = solvedMatch ? parseInt(solvedMatch[1]) : 0;
 
-  // Stars from rating
   let stars = '1★';
   if (rating >= 2500) stars = '7★';
   else if (rating >= 2200) stars = '6★';
@@ -216,41 +210,38 @@ async function fetchCodeChef(username) {
 
 // ── SkillRack (HTML scrape of public profile) ──────────────────
 
+// Static cert titles since SkillRack profile only shows URLs as link text
+const SKILLRACK_CERTS = [
+  { title: 'JAVA - 50 AVERAGE CHALLENGES', link: 'https://www.skillrack.com/cert/597355/DIC' },
+  { title: 'SQL - Basics (Standard)',       link: 'https://www.skillrack.com/cert/596644/SIX' },
+  { title: 'JAVA - 50 EASY CHALLENGES',     link: 'https://www.skillrack.com/cert/595507/DIK' },
+  { title: 'JAVA - 50 VERY-EASY CHALLENGES',link: 'https://www.skillrack.com/cert/592423/ATY' },
+];
+
 async function fetchSkillRack() {
   const url = 'https://www.skillrack.com/faces/resume.xhtml?id=551325&key=1d3b6f784f4ff36e1988484ee482abe469a5952c';
   const html = await fetchHTML(url);
 
-  const solvedMatch = html.match(/(\d+)\s*(?:Programs?\s*Solved|programs?\s*solved)/i)
-    || html.match(/Programs\s*Solved[^>]*>\s*(\d+)/i)
-    || html.match(/>(\d+)<\/span>\s*<[^>]+>\s*Programs/i);
+  // Rank: green chart bar icon followed by number  e.g. chart bar"></i>91613
+  const rankMatch = html.match(/chart bar"><\/i>(\d+)/);
 
-  const rankMatch = html.match(/Rank[^>]*>\s*#?\s*([\d,]+)/i)
-    || html.match(/([\d,]+)\s*<[^>]+>\s*Rank/i);
+  // Programs solved: first blue code icon number  e.g. blue inverted small icon code"></i>336
+  const solvedMatch = html.match(/blue inverted small icon code"><\/i>(\d+)/);
 
-  // Count certificate links
-  const certMatches = [...html.matchAll(/skillrack\.com\/cert\/[^"'\s]+/g)];
-  const certLinks = [...new Set(certMatches.map(m => 'https://www.' + m[0]))];
+  // Language count: count grey inverted code icon entries
+  const langMatches = [...html.matchAll(/grey inverted small icon code"><\/i>(\d+)/g)];
+  const languageCount = langMatches.length;
 
-  // Extract cert titles near links
-  const certificates = [];
-  const certBlockRegex = /href="[^"]*skillrack\.com\/cert\/[^"]*"[^>]*>([^<]+)</g;
-  let m;
-  while ((m = certBlockRegex.exec(html)) !== null) {
-    certificates.push({ title: m[1].trim(), link: certLinks[certificates.length] || '' });
-  }
-
-  // Language count from profile
-  const langMatch = html.match(/(\d+)\s*(?:Languages?|languages?)/i);
-
-  const programsSolved = solvedMatch ? parseInt(solvedMatch[1].replace(/,/g, '')) : 0;
-  const rank = rankMatch ? parseInt(rankMatch[1].replace(/,/g, '')) : 0;
+  // Certificate count from page
+  const certCountMatch = html.match(/<span class="ui circular big label">(\d+)<\/span>/);
+  const certificateCount = certCountMatch ? parseInt(certCountMatch[1]) : SKILLRACK_CERTS.length;
 
   return {
-    programsSolved,
-    rank,
-    certificateCount: certLinks.length || certificates.length,
-    languageCount: langMatch ? parseInt(langMatch[1]) : 0,
-    certificates: certificates.slice(0, 8),
+    programsSolved: solvedMatch ? parseInt(solvedMatch[1]) : 0,
+    rank: rankMatch ? parseInt(rankMatch[1]) : 0,
+    certificateCount,
+    languageCount,
+    certificates: SKILLRACK_CERTS,
   };
 }
 
