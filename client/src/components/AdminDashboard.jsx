@@ -262,13 +262,13 @@ export default function AdminDashboard({ token, onLogout }) {
 
             <div className={styles.galleryGrid}>
               {filteredGallery.map(item => (
-                <div key={item._id} className={styles.galleryCard}>
+                <div key={item.id} className={styles.galleryCard}>
                   <div className={styles.galleryImgWrap}>
                     <img src={item.filename.startsWith('http') ? item.filename : `${API_BASE}${item.filename}`} alt={item.title} className={styles.galleryImg} />
                     <span className={styles.galleryCat}>
                       {item.category === 'event' ? '🎪' : item.category === 'prize' ? '🏆' : '📸'}
                     </span>
-                    <button className={styles.galleryDelete} onClick={() => handleGDelete(item._id)}>
+                    <button className={styles.galleryDelete} onClick={() => handleGDelete(item.id)}>
                       <FiTrash2 size={14} />
                     </button>
                   </div>
@@ -309,7 +309,7 @@ export default function AdminDashboard({ token, onLogout }) {
             <h3>Uploaded Files ({files.length})</h3>
             {files.length === 0 && <p className={styles.empty}>No files uploaded yet.</p>}
             {files.map(f => (
-              <div key={f._id} className={styles.fileItem}>
+              <div key={f.id} className={styles.fileItem}>
                 <div className={styles.fileInfo}>
                   <a href={f.filename.startsWith('http') ? f.filename : `${API_BASE}/uploads/${f.filename}`} target="_blank" rel="noreferrer" className={styles.fileName}>
                     {f.originalName}
@@ -317,7 +317,7 @@ export default function AdminDashboard({ token, onLogout }) {
                   {f.description && <p className={styles.fileDesc}>{f.description}</p>}
                   <span className={styles.fileMeta}>{formatSize(f.size)} · {new Date(f.createdAt).toLocaleDateString()}</span>
                 </div>
-                <button className={styles.deleteBtn} onClick={() => handleFDelete(f._id)}><FiTrash2 /></button>
+                <button className={styles.deleteBtn} onClick={() => handleFDelete(f.id)}><FiTrash2 /></button>
               </div>
             ))}
           </div>
@@ -330,7 +330,7 @@ export default function AdminDashboard({ token, onLogout }) {
           <h3>Contact Messages ({contacts.length})</h3>
           {contacts.length === 0 && <p className={styles.empty}>No messages yet.</p>}
           {contacts.map(c => (
-            <div key={c._id} className={styles.contactItem}>
+            <div key={c.id} className={styles.contactItem}>
               <div className={styles.contactHeader}>
                 <strong>{c.name}</strong>
                 <span>{c.email}</span>
