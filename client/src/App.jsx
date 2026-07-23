@@ -13,14 +13,12 @@ import FAQ from './components/FAQ';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import AdminPage from './components/AdminPage';
-import StarfieldBackground from './components/StarfieldBackground';
 import './index.css';
 
 function Portfolio() {
   return (
     <>
       <div className="grain" aria-hidden="true" />
-      <StarfieldBackground />
       <Navbar />
       <main style={{ position: 'relative', zIndex: 1 }}>
         <Hero />

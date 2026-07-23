@@ -377,11 +377,10 @@ app.get('/api/admin/contacts', auth, async (req, res) => {
   }
 });
 
+const { fetchAllStats } = require('./codingStats');
+
 // Cache for coding stats
-let statsCache = {
-  data: null,
-  timestamp: 0
-};
+let statsCache = { data: null, timestamp: 0 };
 
 app.get('/api/coding-stats', async (req, res) => {
   const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
@@ -392,56 +391,13 @@ app.get('/api/coding-stats', async (req, res) => {
   }
 
   try {
-    // 1. Login to get token
-    const loginRes = await fetch('https://algolog-v1.onrender.com/api/student/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        rollNo: '24CS302',
-        password: process.env.ALGOLOG_PASSWORD || 'sece@123'
-      })
-    });
-
-    if (!loginRes.ok) {
-      const errorText = await loginRes.text();
-      throw new Error(`AlgoLog login failed with status ${loginRes.status}: ${errorText}`);
-    }
-
-    const loginData = await loginRes.json();
-    const token = loginData.data?.token;
-
-    if (!token) {
-      throw new Error(`AlgoLog token not received. Response: ${JSON.stringify(loginData)}`);
-    }
-
-    // 2. Fetch student profile
-    const profileRes = await fetch('https://algolog-v1.onrender.com/api/student/profile', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    });
-
-    if (!profileRes.ok) {
-      throw new Error(`AlgoLog profile fetch failed: ${profileRes.status}`);
-    }
-
-    const profileData = await profileRes.json();
-
-    if (!profileData.status) {
-      throw new Error(`AlgoLog profile error: ${profileData.message}`);
-    }
-
-    // Update cache
-    statsCache.data = profileData.data.student;
+    const stats = await fetchAllStats();
+    statsCache.data = { stats };
     statsCache.timestamp = now;
-
     res.json(statsCache.data);
   } catch (err) {
-    console.error('Error fetching coding stats from AlgoLog:', err.message);
-    if (statsCache.data) {
-      console.log('Returning stale cache data as fallback');
-      return res.json(statsCache.data);
-    }
+    console.error('Error fetching coding stats:', err.message);
+    if (statsCache.data) return res.json(statsCache.data);
     res.status(500).json({ error: 'Failed to fetch coding stats: ' + err.message });
   }
 });

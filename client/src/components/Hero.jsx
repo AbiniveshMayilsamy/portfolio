@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { FiZap, FiAward, FiGithub, FiArrowRight, FiDownload, FiCode } from 'react-icons/fi';
 import styles from './Hero.module.css';
 import CodingStats from './CodingStats';
+import StarfieldBackground from './StarfieldBackground';
 
 const ROLES = ['Cloud Engineer', 'Full Stack Developer', 'Linux Admin Aspirant'];
 
@@ -162,6 +163,7 @@ export default function Hero() {
 
   return (
     <section className={styles.hero} id="hero">
+      <StarfieldBackground />
       <div ref={cursorGlowRef} className={styles.cursorGlow} aria-hidden="true" />
       <div className={styles.heroBgLight} aria-hidden="true" />
       <div className={styles.heroBgLight2} aria-hidden="true" />
