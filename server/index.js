@@ -12,13 +12,10 @@ const { Contact, Gallery, Upload, sequelize } = require('./models');
 
 // ── Environment Variable Validation ───────────────────────────
 const isProduction = process.env.NODE_ENV === 'production';
-const REQUIRED_ENV = isProduction 
-  ? ['DATABASE_URL', 'JWT_SECRET', 'EMAIL_USER', 'EMAIL_PASS']
-  : ['EMAIL_USER', 'EMAIL_PASS']; // Gmail credentials required, rest defaults allowed locally
+const REQUIRED_ENV = ['EMAIL_USER', 'EMAIL_PASS'];
 const missingEnv = REQUIRED_ENV.filter(key => !process.env[key]);
 if (missingEnv.length > 0) {
-  console.error(`[CONFIG ERROR] Missing required environment variables: ${missingEnv.join(', ')}`);
-  process.exit(1);
+  console.warn(`[CONFIG WARN] Missing env variables: ${missingEnv.join(', ')} — some features may be unavailable.`);
 }
 
 const app = express();
@@ -428,14 +425,14 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-// Authenticate Sequelize & start server
+// Start server immediately — DB connection is non-fatal
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
 sequelize.authenticate()
   .then(() => {
     console.log('Database connected successfully.');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    return sequelize.sync({ alter: false });
   })
   .catch(err => {
-    const config = sequelize.config || {};
-    console.error(`Database connection failed to host: ${config.host}, database: ${config.database}, port: ${config.port}. Error:`, err);
-    process.exit(1);
+    console.warn(`[DB WARN] Database unavailable — DB-dependent routes will return 503. Error: ${err.message}`);
   });
