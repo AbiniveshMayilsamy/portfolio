@@ -2,11 +2,10 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Upload = sequelize.define('Upload', {
-  _id: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    field: 'id'
   },
   filename: {
     type: DataTypes.STRING(500),

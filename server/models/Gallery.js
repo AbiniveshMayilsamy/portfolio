@@ -2,11 +2,10 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Gallery = sequelize.define('Gallery', {
-  _id: {
+  id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    field: 'id'
   },
   title: {
     type: DataTypes.STRING(255),

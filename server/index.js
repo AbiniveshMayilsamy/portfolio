@@ -28,8 +28,8 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'", "http://localhost:5000", "http://localhost:3000"],
-      imgSrc: ["'self'", "data:"],
+      connectSrc: ["'self'", "http://localhost:5000", "http://localhost:3000", "https://portfolio-4vq0.onrender.com"],
+      imgSrc: ["'self'", "data:", "https://portfolio-4vq0.onrender.com", "https://res.cloudinary.com"],
     },
   },
 }));

@@ -89,8 +89,12 @@ export default function AdminDashboard({ token, onLogout }) {
 
   const handleGDelete = async id => {
     if (!confirm('Delete this image?')) return;
-    await api.delete(`/api/admin/gallery/${id}`, { headers });
-    fetchAll();
+    try {
+      await api.delete(`/api/admin/gallery/${id}`, { headers });
+      fetchAll();
+    } catch (err) {
+      alert('Delete failed: ' + (err.response?.data?.error || err.message));
+    }
   };
 
   const handleFUpload = async e => {
@@ -117,8 +121,12 @@ export default function AdminDashboard({ token, onLogout }) {
 
   const handleFDelete = async id => {
     if (!confirm('Delete this file?')) return;
-    await api.delete(`/api/admin/uploads/${id}`, { headers });
-    fetchAll();
+    try {
+      await api.delete(`/api/admin/uploads/${id}`, { headers });
+      fetchAll();
+    } catch (err) {
+      alert('Delete failed: ' + (err.response?.data?.error || err.message));
+    }
   };
 
   const formatSize = b => b < 1024 * 1024 ? `${(b / 1024).toFixed(1)} KB` : `${(b / 1024 / 1024).toFixed(1)} MB`;
@@ -262,13 +270,19 @@ export default function AdminDashboard({ token, onLogout }) {
 
             <div className={styles.galleryGrid}>
               {filteredGallery.map(item => (
-                <div key={item.id} className={styles.galleryCard}>
+                <div key={item._id || item.id} className={styles.galleryCard}>
                   <div className={styles.galleryImgWrap}>
-                    <img src={item.filename.startsWith('http') ? item.filename : `${API_BASE}${item.filename}`} alt={item.title} className={styles.galleryImg} />
+                    <img 
+                      src={item.filename.startsWith('http') 
+                        ? item.filename 
+                        : `${API_BASE}${item.filename}`} 
+                      alt={item.title} 
+                      className={styles.galleryImg} 
+                    />
                     <span className={styles.galleryCat}>
                       {item.category === 'event' ? '🎪' : item.category === 'prize' ? '🏆' : '📸'}
                     </span>
-                    <button className={styles.galleryDelete} onClick={() => handleGDelete(item.id)}>
+                    <button className={styles.galleryDelete} onClick={() => handleGDelete(item._id || item.id)}>
                       <FiTrash2 size={14} />
                     </button>
                   </div>
