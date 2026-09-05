@@ -4,6 +4,7 @@ import { FiZap, FiAward, FiGithub, FiArrowRight, FiDownload, FiCode } from 'reac
 import styles from './Hero.module.css';
 import CodingStats from './CodingStats';
 import StarfieldBackground from './StarfieldBackground';
+import ThreeAvatar from './ThreeAvatar';
 
 const ROLES = ['Cloud Engineer', 'Full Stack Developer', 'Linux Admin Aspirant'];
 
@@ -88,59 +89,7 @@ function BadgeCard({ imgSrc, alt, label, sublabel, delay = 0.5, animDelay = 1.2 
   );
 }
 
-function CloudCard() {
-  const cardRef = useRef(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const springX = useSpring(x, { stiffness: 150, damping: 20 });
-  const springY = useSpring(y, { stiffness: 150, damping: 20 });
-  const rotateX = useTransform(springY, [-0.5, 0.5], [12, -12]);
-  const rotateY = useTransform(springX, [-0.5, 0.5], [-12, 12]);
-  const glowX = useTransform(springX, [-0.5, 0.5], [0, 100]);
-  const glowY = useTransform(springY, [-0.5, 0.5], [0, 100]);
 
-  const handleMouseMove = (e) => {
-    const rect = cardRef.current.getBoundingClientRect();
-    x.set((e.clientX - rect.left) / rect.width - 0.5);
-    y.set((e.clientY - rect.top) / rect.height - 0.5);
-  };
-  const handleMouseLeave = () => { x.set(0); y.set(0); };
-
-  return (
-    <motion.div
-      ref={cardRef}
-      className={styles.cloudCard}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      initial={{ opacity: 0, x: 60, y: 20 }}
-      animate={{ opacity: 1, x: 0, y: 0 }}
-      transition={{ duration: 0.9, delay: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      style={{ rotateX, rotateY, transformStyle: 'preserve-3d', transformPerspective: 800 }}
-    >
-      {/* Dynamic glow follow */}
-      <motion.div
-        className={styles.cardGlow}
-        style={{ backgroundPosition: `${glowX}% ${glowY}%` }}
-      />
-
-      {/* Image */}
-      <div className={styles.cardInner} style={{ transform: 'translateZ(20px)' }}>
-        <img src="/AM.png" alt="Cloud Computing" className={styles.cloudImg} />
-      </div>
-
-      {/* Floating badge */}
-      <motion.div
-        className={styles.cardBadge}
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ transform: 'translateZ(30px)' }}
-      >
-        <span className={styles.badgeDot} />
-        Available for work
-      </motion.div>
-    </motion.div>
-  );
-}
 
 export default function Hero() {
   const [roleIdx, setRoleIdx] = useState(0);
@@ -253,7 +202,15 @@ export default function Hero() {
               animDelay={1.3}
             />
           </div>
-          <CloudCard />
+
+          <motion.div
+            className={styles.avatarStage}
+            initial={{ opacity: 0, y: 30, scale: 0.96 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ duration: 0.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <ThreeAvatar />
+          </motion.div>
         </div>
       </div>
       <CodingStats isOpen={showStats} onClose={() => setShowStats(false)} />
