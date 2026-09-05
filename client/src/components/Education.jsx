@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { FiAward, FiBookOpen } from 'react-icons/fi';
+import { FiAward, FiBookOpen, FiCheckCircle, FiClock } from 'react-icons/fi';
 import styles from './Education.module.css';
 
 const education = [
@@ -27,16 +27,18 @@ const education = [
 ];
 
 const achievements = [
-  { title: 'NPTEL Design Thinking - A Primer', org: 'NPTEL — Score: 65, Elite Status' },
-  { title: 'AWS Certified Cloud Practitioner (CLF-C02)', org: 'Certified — Amazon Web Services' },
-  { title: '2nd Prize — Agentic AI Loan System', org: 'Fiestaa\'26, KPR Institute of Engineering' },
-  { title: 'Top 300 Finalist', org: 'FixForward Ideathon 2026' },
-  { title: 'Bonfiglioli Smart Motion Hackathon 2.0', org: '48hr Hackathon — Chennai Institute of Technology' },
-  { title: 'SQL Intermediate & Advanced', org: 'HackerRank' },
-  { title: 'Java Fundamentals Badge', org: 'Oracle' },
-  { title: 'Intro to ML, DL & Computer Vision', org: 'IIT Madras (Online)' },
-  { title: 'K! Hacks 3.0', org: 'Participant (Online) — National Level Hackathon' },
-  { title: 'Quantathon 3.0', org: 'Participant (Online) — National Level Competition' },
+  { title: 'AWS Certified Solutions Architect – Associate (SAA-C03)', org: 'Certified — Amazon Web Services', status: 'completed' },
+  { title: 'AWS Certified Cloud Practitioner (CLF-C02)', org: 'Certified — Amazon Web Services', status: 'completed' },
+  { title: 'HashiCorp Certified: Terraform Associate (003)', org: 'Preparing / Next Certification Goal', status: 'preparing' },
+  { title: 'NPTEL Design Thinking - A Primer', org: 'NPTEL — Score: 65, Elite Status', status: 'completed' },
+  { title: '2nd Prize — Agentic AI Loan System', org: 'Fiestaa\'26, KPR Institute of Engineering', status: 'completed' },
+  { title: 'Top 300 Finalist', org: 'FixForward Ideathon 2026', status: 'completed' },
+  { title: 'Bonfiglioli Smart Motion Hackathon 2.0', org: '48hr Hackathon — Chennai Institute of Technology', status: 'completed' },
+  { title: 'SQL Intermediate & Advanced', org: 'HackerRank', status: 'completed' },
+  { title: 'Java Fundamentals Badge', org: 'Oracle', status: 'completed' },
+  { title: 'Intro to ML, DL & Computer Vision', org: 'IIT Madras (Online)', status: 'completed' },
+  { title: 'K! Hacks 3.0', org: 'Participant (Online) — National Level Hackathon', status: 'completed' },
+  { title: 'Quantathon 3.0', org: 'Participant (Online) — National Level Competition', status: 'completed' },
 ];
 
 export default function Education() {
@@ -102,12 +104,19 @@ export default function Education() {
 
             <div className={styles.achieveList}>
               {achievements.map((a, idx) => (
-                <div key={idx} className={styles.achieveItem}>
-                  <div className={styles.badgeIcon}>
-                    <FiBookOpen />
+                <div key={idx} className={`${styles.achieveItem} ${a.status === 'preparing' ? styles.itemPreparing : ''}`}>
+                  <div className={`${styles.badgeIcon} ${a.status === 'preparing' ? styles.badgeIconPreparing : styles.badgeIconCompleted}`}>
+                    {a.status === 'preparing' ? <FiClock /> : <FiCheckCircle />}
                   </div>
-                  <div>
-                    <h4 className={styles.achieveName}>{a.title}</h4>
+                  <div className={styles.achieveInfo}>
+                    <div className={styles.nameRow}>
+                      <h4 className={styles.achieveName}>{a.title}</h4>
+                      {a.status === 'preparing' ? (
+                        <span className={styles.statusTagPreparing}>Preparing</span>
+                      ) : (
+                        <span className={styles.statusTagCompleted}>Completed</span>
+                      )}
+                    </div>
                     <p className={styles.achieveOrg}>{a.org}</p>
                   </div>
                 </div>

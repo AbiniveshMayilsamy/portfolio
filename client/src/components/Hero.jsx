@@ -45,7 +45,7 @@ function CountUp({ target, duration = 1500, suffix = '' }) {
   return <>{count}{suffix}</>;
 }
 
-function BadgeCard() {
+function BadgeCard({ imgSrc, alt, label, delay = 0.5, animDelay = 1.2 }) {
   const cardRef = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -69,18 +69,18 @@ function BadgeCard() {
       onMouseLeave={handleMouseLeave}
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.8, delay, ease: [0.16, 1, 0.3, 1] }}
       style={{ rotateX, rotateY, transformStyle: 'preserve-3d', transformPerspective: 800 }}
     >
       <motion.img
-        src="/badge1.png"
-        alt="AWS Certified Cloud Practitioner"
+        src={imgSrc}
+        alt={alt}
         className={styles.badgeImg}
         animate={{ rotate: [0, 8, -8, 8, 0] }}
-        transition={{ duration: 1.5, delay: 1.2, ease: 'easeInOut' }}
+        transition={{ duration: 1.5, delay: animDelay, ease: 'easeInOut' }}
         style={{ transform: 'translateZ(20px)' }}
       />
-      <span className={styles.badgeLabel} style={{ transform: 'translateZ(10px)' }}>AWS Certified Cloud Practitioner</span>
+      <span className={styles.badgeLabel} style={{ transform: 'translateZ(10px)' }}>{label}</span>
     </motion.div>
   );
 }
@@ -230,9 +230,24 @@ export default function Hero() {
           </motion.div>
         </div>
 
-        {/* RIGHT — badge + 3D tilt cloud card */}
+        {/* RIGHT — badges + 3D tilt cloud card */}
         <div className={styles.cardCol}>
-          <BadgeCard />
+          <div className={styles.badgesRow}>
+            <BadgeCard
+              imgSrc="/aws-certified-solutions-architect-associate.png"
+              alt="AWS Certified Solutions Architect – Associate"
+              label="AWS Certified Solutions Architect"
+              delay={0.4}
+              animDelay={1.0}
+            />
+            <BadgeCard
+              imgSrc="/badge1.png"
+              alt="AWS Certified Cloud Practitioner"
+              label="AWS Certified Cloud Practitioner"
+              delay={0.55}
+              animDelay={1.3}
+            />
+          </div>
           <CloudCard />
         </div>
       </div>

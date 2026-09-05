@@ -197,6 +197,74 @@
   color: var(--accent);
 }
 
+.badgeIconCompleted {
+  color: var(--accent);
+  background-color: rgba(153, 255, 0, 0.05);
+  border-color: rgba(153, 255, 0, 0.25);
+}
+
+.badgeIconPreparing {
+  color: #00d4ff;
+  background-color: rgba(0, 212, 255, 0.05);
+  border-color: rgba(0, 212, 255, 0.3);
+  animation: pulsePrep 2.2s infinite ease-in-out;
+}
+
+.achieveInfo {
+  flex: 1;
+}
+
+.nameRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.statusTagCompleted {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(153, 255, 0, 0.08);
+  border: 1px solid rgba(153, 255, 0, 0.25);
+  color: var(--accent);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.statusTagPreparing {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  background: rgba(0, 212, 255, 0.08);
+  border: 1px solid rgba(0, 212, 255, 0.35);
+  color: #00d4ff;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.itemPreparing {
+  border-left: 2px solid rgba(0, 212, 255, 0.45);
+  padding-left: 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: 4px;
+}
+
+@keyframes pulsePrep {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(0, 212, 255, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 8px 2px rgba(0, 212, 255, 0.25);
+  }
+}
+
 .achieveName {
   font-family: var(--font-sans);
   font-size: 0.95rem;

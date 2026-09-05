@@ -2,7 +2,9 @@ import styles from './Marquee.module.css';
 
 const items = [
   '🏆 Competition Winner',
-  '☁️ AWS Certified — Intellipaat',
+  '☁️ AWS Certified Solutions Architect (SAA-C03)',
+  '⚡ AWS Certified Cloud Practitioner (CLF-C02)',
+  '🛠️ Preparing for Terraform Associate Exam',
   '🎓 IIT Madras — ML & Computer Vision',
   '✅ Oracle Java Fundamentals Badge',
   '🥇 HackerRank SQL Advanced',

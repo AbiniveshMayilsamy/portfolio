@@ -9,13 +9,15 @@ const services = [
     icon: <FiCloud />,
     desc: 'Architecting and deploying scalable cloud-native solutions on AWS. Aspiring Linux System Administrator with a strong focus on server management, cloud security, and DevOps workflows.',
     features: [
-      'AWS Cloud services & deployment (AWS Certified Cloud Practitioner)',
-      'Preparing for SAA-C03 — AWS Certified Solutions Architect',
+      'AWS Cloud services & deployment (AWS Certified Solutions Architect & Cloud Practitioner)',
+      'AWS Certified Solutions Architect – Associate (SAA-C03)',
+      'AWS Certified Cloud Practitioner (CLF-C02)',
+      'Preparing for HashiCorp Certified: Terraform Associate (003)',
       'Linux system administration & server management',
       'Cloud security, IAM & cost optimization',
-      'CI/CD pipelines & DevOps practices'
+      'CI/CD pipelines, Terraform & DevOps practices'
     ],
-    tech: ['AWS', 'Linux', 'EC2', 'S3', 'IAM', 'Docker', 'CI/CD']
+    tech: ['AWS', 'Terraform', 'Linux', 'EC2', 'S3', 'IAM', 'Docker', 'CI/CD']
   },
   {
     num: '02',

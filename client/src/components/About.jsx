@@ -51,7 +51,7 @@ export default function About() {
               I'm a Computer Science Engineering student passionate about cloud infrastructure, Linux systems, and full stack development. I specialize in designing and deploying scalable cloud-native solutions on AWS, with a strong interest in system administration and DevOps practices.
             </p>
             <p className={styles.para}>
-              Admitted to B.E. CSE at Sri Eshwar College of Engineering via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%. Holding AWS Certified Cloud Practitioner (CLF-C02) certification and preparing for AWS Certified Solutions Architect (SAA-C03), with a strong aspiration to specialize in Linux system administration and cloud infrastructure.
+              Admitted to B.E. CSE at Sri Eshwar College of Engineering via lateral entry after completing my Diploma in Computer Engineering at Nachimuthu Polytechnic College with 92.5%. Holding AWS Certified Solutions Architect – Associate (SAA-C03) &amp; AWS Certified Cloud Practitioner (CLF-C02) certifications and preparing for HashiCorp Certified: Terraform Associate (003), with a strong aspiration to specialize in Linux system administration and cloud infrastructure.
             </p>
             <p className={styles.para}>
               Hackathon highlights: 2nd Prize at Fiestaa'26 (KPR Institute) for Agentic AI Loan Approval System, Top 300 Finalist at FixForward Ideathon 2026, and participant at Bonfiglioli Smart Motion Hackathon 2.0 building the Neuro-Nav AGV.
