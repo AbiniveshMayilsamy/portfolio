@@ -45,7 +45,7 @@ function CountUp({ target, duration = 1500, suffix = '' }) {
   return <>{count}{suffix}</>;
 }
 
-function BadgeCard({ imgSrc, alt, label, delay = 0.5, animDelay = 1.2 }) {
+function BadgeCard({ imgSrc, alt, label, sublabel, delay = 0.5, animDelay = 1.2 }) {
   const cardRef = useRef(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -81,6 +81,9 @@ function BadgeCard({ imgSrc, alt, label, delay = 0.5, animDelay = 1.2 }) {
         style={{ transform: 'translateZ(20px)' }}
       />
       <span className={styles.badgeLabel} style={{ transform: 'translateZ(10px)' }}>{label}</span>
+      {sublabel && (
+        <span className={styles.badgeSublabel} style={{ transform: 'translateZ(12px)' }}>{sublabel}</span>
+      )}
     </motion.div>
   );
 }
@@ -237,6 +240,7 @@ export default function Hero() {
               imgSrc="/aws-certified-solutions-architect-associate.png"
               alt="AWS Certified Solutions Architect – Associate"
               label="AWS Certified Solutions Architect"
+              sublabel="Associate"
               delay={0.4}
               animDelay={1.0}
             />
@@ -244,6 +248,7 @@ export default function Hero() {
               imgSrc="/badge1.png"
               alt="AWS Certified Cloud Practitioner"
               label="AWS Certified Cloud Practitioner"
+              sublabel="Foundational"
               delay={0.55}
               animDelay={1.3}
             />
