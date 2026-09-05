@@ -2,10 +2,20 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import styles from './ThreeAvatar.module.css';
 
+// Module-level persistent cache for textures to eliminate reload lag and GPU re-upload
+let cachedOpenTex = null;
+let cachedBlinkTex = null;
+let cachedGreenTexture = null;
+let cachedGreyTexture = null;
+let texturesPromise = null;
+
 /**
- * Creates a seamless high-resolution canvas texture with repeated text
+ * Creates or retrieves a cached seamless canvas texture for the 3D rotating text ribbons
  */
-function createRollingTextTexture(variant = 'green') {
+function getRollingTextTexture(variant = 'green') {
+  if (variant === 'green' && cachedGreenTexture) return cachedGreenTexture;
+  if (variant === 'grey' && cachedGreyTexture) return cachedGreyTexture;
+
   const canvas = document.createElement('canvas');
   const tempCtx = canvas.getContext('2d');
   if (!tempCtx) return null;
@@ -82,12 +92,62 @@ function createRollingTextTexture(variant = 'green') {
   texture.wrapT = THREE.ClampToEdgeWrapping;
   texture.generateMipmaps = true;
   texture.minFilter = THREE.LinearMipmapLinearFilter;
+
+  if (isGreen) {
+    cachedGreenTexture = texture;
+  } else {
+    cachedGreyTexture = texture;
+  }
+
   return texture;
+}
+
+/**
+ * Loads and caches the transparent cutout PNG textures once in memory
+ */
+function loadAvatarTextures() {
+  if (cachedOpenTex && cachedBlinkTex) {
+    return Promise.resolve({ openTex: cachedOpenTex, blinkTex: cachedBlinkTex });
+  }
+
+  if (!texturesPromise) {
+    const loader = new THREE.TextureLoader();
+    texturesPromise = Promise.all([
+      new Promise((resolve, reject) => {
+        loader.load(
+          '/avatar_open.png',
+          (tex) => {
+            tex.generateMipmaps = true;
+            tex.minFilter = THREE.LinearMipmapLinearFilter;
+            cachedOpenTex = tex;
+            resolve(tex);
+          },
+          undefined,
+          reject
+        );
+      }),
+      new Promise((resolve, reject) => {
+        loader.load(
+          '/avatar_blink.png',
+          (bTex) => {
+            bTex.generateMipmaps = true;
+            bTex.minFilter = THREE.LinearMipmapLinearFilter;
+            cachedBlinkTex = bTex;
+            resolve(bTex);
+          },
+          undefined,
+          reject
+        );
+      }),
+    ]).then(([openTex, blinkTex]) => ({ openTex, blinkTex }));
+  }
+
+  return texturesPromise;
 }
 
 export default function ThreeAvatar() {
   const containerRef = useRef(null);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(Boolean(cachedOpenTex && cachedBlinkTex));
   const triggerBlinkRef = useRef(null);
 
   const handleClick = useCallback(() => {
@@ -100,10 +160,13 @@ export default function ThreeAvatar() {
     const container = containerRef.current;
     if (!container) return;
 
+    let isMounted = true;
+    let animId;
+
     let width = container.clientWidth || 360;
     let height = container.clientHeight || 480;
 
-    // Scene setup
+    // WebGL Scene setup
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
@@ -113,6 +176,8 @@ export default function ThreeAvatar() {
       antialias: true,
       alpha: true,
       powerPreference: 'high-performance',
+      stencil: false,
+      depth: true,
     });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
@@ -124,7 +189,7 @@ export default function ThreeAvatar() {
     const rootGroup = new THREE.Group();
     scene.add(rootGroup);
 
-    // Subtle ambient & directional lights
+    // Ambient & directional lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
@@ -136,73 +201,8 @@ export default function ThreeAvatar() {
     cyanRimLight.position.set(-3, -2, 2);
     scene.add(cyanRimLight);
 
-    // Texture Loader
-    const textureLoader = new THREE.TextureLoader();
-    let openTex = null;
-    let blinkTex = null;
-    let avatarMesh = null;
-
-    // Load transparent cutout textures
-    textureLoader.load('/avatar_open.png', (tex) => {
-      openTex = tex;
-      openTex.generateMipmaps = true;
-      openTex.minFilter = THREE.LinearMipmapLinearFilter;
-
-      textureLoader.load('/avatar_blink.png', (bTex) => {
-        blinkTex = bTex;
-        blinkTex.generateMipmaps = true;
-        blinkTex.minFilter = THREE.LinearMipmapLinearFilter;
-
-        // Enlarged transparent cutout avatar plane (no square image borders visible)
-        const planeGeo = new THREE.PlaneGeometry(4.35, 5.82);
-
-        const avatarMat = new THREE.ShaderMaterial({
-          uniforms: {
-            uOpenTex: { value: openTex },
-            uBlinkTex: { value: blinkTex },
-            uBlinkMix: { value: 0.0 },
-          },
-          vertexShader: `
-            varying vec2 vUv;
-            void main() {
-              vUv = uv;
-              gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-            }
-          `,
-          fragmentShader: `
-            uniform sampler2D uOpenTex;
-            uniform sampler2D uBlinkTex;
-            uniform float uBlinkMix;
-            varying vec2 vUv;
-
-            void main() {
-              vec4 colOpen = texture2D(uOpenTex, vUv);
-              vec4 colBlink = texture2D(uBlinkTex, vUv);
-              
-              // Smooth crossfade blend between open eyes and serene smiling blink
-              vec4 baseColor = mix(colOpen, colBlink, uBlinkMix);
-              
-              // Discard transparent background pixels so edges of image are completely invisible
-              if (baseColor.a < 0.05) discard;
-
-              gl_FragColor = baseColor;
-            }
-          `,
-          transparent: true,
-          depthTest: true,
-          depthWrite: true,
-        });
-
-        avatarMesh = new THREE.Mesh(planeGeo, avatarMat);
-        avatarMesh.position.set(0, -0.38, 0);
-        avatarMesh.renderOrder = 1;
-        rootGroup.add(avatarMesh);
-        setIsLoaded(true);
-      });
-    });
-
-    // Dual Crossed 3D Rings: Green & Grey positioned near the head (well above eyes)
-    const greenTexture = createRollingTextTexture('green');
+    // Dual Crossed 3D Rings: Green & Grey positioned near head crown (y = 1.72)
+    const greenTexture = getRollingTextTexture('green');
     let greenRibbonMesh = null;
 
     if (greenTexture) {
@@ -221,7 +221,6 @@ export default function ThreeAvatar() {
       });
 
       greenRibbonMesh = new THREE.Mesh(greenCylinderGeo, greenRibbonMat);
-      // Positioned near head crown (y = 1.72), well above eyes
       greenRibbonMesh.position.set(0, 1.72, 0.05);
       greenRibbonMesh.rotation.x = 0.26;
       greenRibbonMesh.rotation.z = -0.22;
@@ -229,7 +228,7 @@ export default function ThreeAvatar() {
       rootGroup.add(greenRibbonMesh);
     }
 
-    const greyTexture = createRollingTextTexture('grey');
+    const greyTexture = getRollingTextTexture('grey');
     let greyRibbonMesh = null;
 
     if (greyTexture) {
@@ -248,7 +247,6 @@ export default function ThreeAvatar() {
       });
 
       greyRibbonMesh = new THREE.Mesh(greyCylinderGeo, greyRibbonMat);
-      // Crossed angle at the exact same head center (y = 1.72)
       greyRibbonMesh.position.set(0, 1.72, 0.05);
       greyRibbonMesh.rotation.x = -0.26;
       greyRibbonMesh.rotation.z = 0.22;
@@ -256,7 +254,7 @@ export default function ThreeAvatar() {
       rootGroup.add(greyRibbonMesh);
     }
 
-    // Floating cyber particles ring around the head halo
+    // Floating cyber particles ring around head halo
     const particleCount = 60;
     const particleGeo = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -296,7 +294,9 @@ export default function ThreeAvatar() {
     const particles = new THREE.Points(particleGeo, particleMat);
     rootGroup.add(particles);
 
-    // Mouse tracking & physics
+    let avatarMesh = null;
+
+    // Mouse tracking
     let mouseX = 0;
     let mouseY = 0;
     let targetRotX = 0;
@@ -306,6 +306,9 @@ export default function ThreeAvatar() {
     let blinkStartTime = -10;
     let isBlinkingNow = false;
     let nextBlinkTime = 3.2;
+
+    const clock = new THREE.Clock();
+    const LOOP_DURATION = 30;
 
     const triggerSmoothBlink = () => {
       if (isBlinkingNow) return;
@@ -319,7 +322,7 @@ export default function ThreeAvatar() {
       const rect = container.getBoundingClientRect();
       const x = (e.clientX - rect.left) / rect.width - 0.5;
       const y = (e.clientY - rect.top) / rect.height - 0.5;
-      mouseX = x * 2; // -1 to 1
+      mouseX = x * 2;
       mouseY = y * 2;
     };
 
@@ -331,17 +334,19 @@ export default function ThreeAvatar() {
     container.addEventListener('pointermove', handlePointerMove);
     container.addEventListener('pointerleave', handlePointerLeave);
 
-    // Animation Loop
-    let animId;
-    const clock = new THREE.Clock();
-    const LOOP_DURATION = 30; // 30 seconds interval for text loop
+    // Animation Loop with delta-time smoothing to eliminate jitter
+    let lastTime = performance.now();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
+      const now = performance.now();
+      const delta = Math.min((now - lastTime) / 1000, 0.05); // capped delta to prevent jumps
+      lastTime = now;
+
       const elapsedTime = clock.getElapsedTime();
 
-      // 1. Dual Text Ribbons Roll: exactly 1 full cycle every 30/32 seconds
+      // 1. Dual Text Ribbons Roll
       if (greenTexture) {
         greenTexture.offset.x = (elapsedTime / LOOP_DURATION) % 1;
       }
@@ -372,12 +377,12 @@ export default function ThreeAvatar() {
           const totalDuration = closeDuration + holdDuration + openDuration; // ~560ms
 
           if (dt < closeDuration) {
-            const p = dt / closeDuration;
+            const p = Math.max(0, Math.min(1, dt / closeDuration));
             uBlinkMix.value = 0.5 - 0.5 * Math.cos(p * Math.PI);
           } else if (dt < closeDuration + holdDuration) {
             uBlinkMix.value = 1.0;
           } else if (dt < totalDuration) {
-            const p = (dt - closeDuration - holdDuration) / openDuration;
+            const p = Math.max(0, Math.min(1, (dt - closeDuration - holdDuration) / openDuration));
             uBlinkMix.value = 0.5 + 0.5 * Math.cos(p * Math.PI);
           } else {
             uBlinkMix.value = 0.0;
@@ -388,14 +393,15 @@ export default function ThreeAvatar() {
         }
       }
 
-      // 4. 3D Tilt with smooth lerp
+      // 4. 3D Tilt with frame-rate independent exponential smoothing (zero jitter)
       targetRotY = mouseX * 0.28;
       targetRotX = -mouseY * 0.2;
+      const damp = 1.0 - Math.exp(-8.0 * delta);
 
-      rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * 0.06;
-      rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * 0.06;
+      rootGroup.rotation.y += (targetRotY - rootGroup.rotation.y) * damp;
+      rootGroup.rotation.x += (targetRotX - rootGroup.rotation.x) * damp;
 
-      // 5. Natural breathing & gentle floating idle motion (smooth, zero jump)
+      // 5. Natural breathing & gentle floating idle motion
       const breathing = Math.sin(elapsedTime * 1.6) * 0.035;
       const sway = Math.cos(elapsedTime * 1.1) * 0.018;
 
@@ -408,7 +414,61 @@ export default function ThreeAvatar() {
       renderer.render(scene, camera);
     };
 
-    animate();
+    // Load textures using memory cache, construct avatarMesh, pre-compile WebGL shaders, then start
+    loadAvatarTextures().then(({ openTex, blinkTex }) => {
+      if (!isMounted) return;
+
+      const planeGeo = new THREE.PlaneGeometry(4.35, 5.82);
+
+      const avatarMat = new THREE.ShaderMaterial({
+        uniforms: {
+          uOpenTex: { value: openTex },
+          uBlinkTex: { value: blinkTex },
+          uBlinkMix: { value: 0.0 },
+        },
+        vertexShader: `
+          varying vec2 vUv;
+          void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D uOpenTex;
+          uniform sampler2D uBlinkTex;
+          uniform float uBlinkMix;
+          varying vec2 vUv;
+
+          void main() {
+            vec4 colOpen = texture2D(uOpenTex, vUv);
+            vec4 colBlink = texture2D(uBlinkTex, vUv);
+            
+            // Smooth crossfade blend between open eyes and serene smiling blink
+            vec4 baseColor = mix(colOpen, colBlink, uBlinkMix);
+            
+            // Discard transparent background pixels so edges of image are completely invisible
+            if (baseColor.a < 0.05) discard;
+
+            gl_FragColor = baseColor;
+          }
+        `,
+        transparent: true,
+        depthTest: true,
+        depthWrite: true,
+      });
+
+      avatarMesh = new THREE.Mesh(planeGeo, avatarMat);
+      avatarMesh.position.set(0, -0.38, 0);
+      avatarMesh.renderOrder = 1;
+      rootGroup.add(avatarMesh);
+
+      // Pre-compile shaders and upload GPU buffers ahead of time to eliminate initial stutter/jitter
+      renderer.compile(scene, camera);
+      renderer.render(scene, camera);
+
+      setIsLoaded(true);
+      animate();
+    });
 
     // Resize handling
     const resizeObserver = new ResizeObserver((entries) => {
@@ -426,6 +486,7 @@ export default function ThreeAvatar() {
 
     // Cleanup
     return () => {
+      isMounted = false;
       cancelAnimationFrame(animId);
       resizeObserver.disconnect();
       container.removeEventListener('pointermove', handlePointerMove);
@@ -437,10 +498,7 @@ export default function ThreeAvatar() {
 
       renderer.dispose();
       scene.clear();
-      greenTexture?.dispose();
-      greyTexture?.dispose();
-      openTex?.dispose();
-      blinkTex?.dispose();
+      // Keep cached textures in memory for instant reuse on remount
     };
   }, []);
 

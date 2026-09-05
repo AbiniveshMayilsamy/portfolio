@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { FiZap, FiAward, FiGithub, FiArrowRight, FiDownload, FiCode } from 'react-icons/fi';
 import styles from './Hero.module.css';
 import CodingStats from './CodingStats';
 import StarfieldBackground from './StarfieldBackground';
-import ThreeAvatar from './ThreeAvatar';
+
+const ThreeAvatar = lazy(() => import('./ThreeAvatar'));
 
 const ROLES = ['Cloud Engineer', 'Full Stack Developer', 'Linux Admin Aspirant'];
 
@@ -209,7 +210,15 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.9, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <ThreeAvatar />
+            <Suspense
+              fallback={
+                <div className={styles.avatarSkeletonFallback}>
+                  <div className={styles.avatarSpinner} />
+                </div>
+              }
+            >
+              <ThreeAvatar />
+            </Suspense>
           </motion.div>
         </div>
       </div>
