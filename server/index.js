@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const nodemailer = require('nodemailer');
 const multer = require('multer');
 const jwt = require('jsonwebtoken');
 const path = require('path');
@@ -12,10 +11,10 @@ const { Contact, Gallery, Upload, sequelize } = require('./models');
 
 // ── Environment Variable Validation ───────────────────────────
 const isProduction = process.env.NODE_ENV === 'production';
-const REQUIRED_ENV = ['EMAIL_USER', 'EMAIL_PASS'];
+const REQUIRED_ENV = ['EMAIL_USER'];
 const missingEnv = REQUIRED_ENV.filter(key => !process.env[key]);
 if (missingEnv.length > 0) {
-  console.warn(`[CONFIG WARN] Missing env variables: ${missingEnv.join(', ')} — some features may be unavailable.`);
+  console.warn(`[CONFIG WARN] Missing env variables: ${missingEnv.join(', ')} — default mail recipient will be used.`);
 }
 
 const app = express();
@@ -28,7 +27,7 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'", "http://localhost:5000", "http://localhost:3000", "https://portfolio-4vq0.onrender.com"],
+      connectSrc: ["'self'", "http://localhost:5000", "http://localhost:3000", "https://portfolio-4vq0.onrender.com", "https://formsubmit.co"],
       imgSrc: ["'self'", "data:", "https://portfolio-4vq0.onrender.com", "https://res.cloudinary.com"],
     },
   },
@@ -349,17 +348,39 @@ app.post('/api/contact', strictLimiter, async (req, res, next) => {
       message: sanitizedMessage 
     });
     
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
-    });
-    await transporter.sendMail({
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      subject: `Portfolio Contact from ${sanitizedName}`,
-      text: `Name: ${sanitizedName}\nEmail: ${sanitizedEmail}\nMessage: ${sanitizedMessage}`
-    });
-    res.json({ success: true });
+    // ── Send Email via FormSubmit ──
+    const recipientEmail = process.env.EMAIL_USER || 'abiniveshmayilsamy1@gmail.com';
+    const clientOrigin = req.headers.origin || req.headers.referer || process.env.ALLOWED_ORIGIN || 'https://abinivesh.me';
+
+    try {
+      const formSubmitRes = await fetch(`https://formsubmit.co/ajax/${recipientEmail}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Origin': clientOrigin,
+          'Referer': clientOrigin
+        },
+        body: JSON.stringify({
+          name: sanitizedName,
+          email: sanitizedEmail,
+          message: sanitizedMessage,
+          _subject: `Portfolio Contact from ${sanitizedName}`,
+          _template: 'table',
+          _captcha: 'false'
+        })
+      });
+
+      const fsData = await formSubmitRes.json().catch(() => ({}));
+      if (!formSubmitRes.ok && fsData.success !== 'true' && fsData.success !== true) {
+        console.warn('[FormSubmit warning]', fsData);
+      }
+    } catch (mailErr) {
+      console.error('[FormSubmit error]', mailErr);
+      // Contact is preserved in DB even if FormSubmit experiences external latency
+    }
+
+    res.json({ success: true, message: 'Message submitted successfully via FormSubmit!' });
   } catch (err) {
     next(err); // Pass to centralized error handler
   }

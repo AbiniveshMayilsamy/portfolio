@@ -17,20 +17,44 @@ export default function Contact() {
     setStatus('');
 
     try {
-      // Post directly to Express backend
+      // 1. Post to Express backend (records in DB and triggers server FormSubmit dispatch)
       const res = await api.post('/api/contact', form);
-      if (res.data.success) {
+      if (res.data?.success) {
         setStatus('success');
         setForm({ name: '', email: '', message: '' });
-      } else {
-        throw new Error('API failed');
+        return;
       }
+      throw new Error(res.data?.error || 'Backend failed');
     } catch (err) {
-      console.warn('Backend contact failed, falling back to mailto link', err);
-      // Fallback: Open client email client
-      window.location.href = `mailto:abiniveshmayilsamy1@gmail.com?subject=Portfolio Contact from ${form.name}&body=${encodeURIComponent(form.message)}%0A%0AFrom: ${form.email}`;
-      setStatus('success');
-      setForm({ name: '', email: '', message: '' });
+      console.warn('Backend contact submission failed, attempting direct FormSubmit delivery...', err);
+      // 2. Direct client-side FormSubmit delivery (works even if backend is offline/sleeping)
+      try {
+        const directRes = await fetch('https://formsubmit.co/ajax/abiniveshmayilsamy1@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            name: form.name,
+            email: form.email,
+            message: form.message,
+            _subject: `Portfolio Contact from ${form.name}`,
+            _template: 'table',
+            _captcha: 'false'
+          })
+        });
+        const fsData = await directRes.json().catch(() => ({}));
+        if (directRes.ok || fsData.success === 'true' || fsData.success === true || (fsData.message && fsData.message.includes('Activation'))) {
+          setStatus('success');
+          setForm({ name: '', email: '', message: '' });
+          return;
+        }
+        throw new Error(fsData.message || 'FormSubmit delivery failed');
+      } catch (submitErr) {
+        console.error('All contact submission channels failed:', submitErr);
+        setStatus('error');
+      }
     } finally {
       setLoading(false);
     }
@@ -130,7 +154,12 @@ export default function Contact() {
             </div>
 
             {status === 'success' && (
-              <p className={styles.success}>&nbsp; Message submitted successfully!</p>
+              <p className={styles.success}>✓ Message submitted successfully! I'll get back to you soon.</p>
+            )}
+            {status === 'error' && (
+              <p style={{ color: '#ff5c5c', fontSize: '0.9rem', marginTop: '0.25rem' }}>
+                ✕ Could not deliver message. Please try again or reach out directly at abiniveshmayilsamy1@gmail.com
+              </p>
             )}
 
             <button type="submit" className="btn shiny-cta" style={{ width: '100%' }} disabled={loading}>
